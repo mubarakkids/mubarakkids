@@ -9,21 +9,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #EEF1EA;
-    --surface: #FFFFFF;
-    --surface-2: #F7F5EF;
-    --ink: #22302B;
-    --ink-soft: #48564C;
-    --stitch: #93876C;
-    --rose: #D9838C;
-    --rose-ink: #7A2E36;
-    --teal: #2E6B60;
-    --teal-ink: #163832;
-    --mustard: #DB9F35;
-    --mustard-ink: #6B4B0F;
-    --danger: #9A3A22;
-    --line: #C9C0A6;
-    --radius: 4px;
+    --bg: #EEF1EA; --surface: #FFFFFF; --surface-2: #F7F5EF;
+    --ink: #22302B; --ink-soft: #48564C; --stitch: #93876C;
+    --rose: #D9838C; --rose-ink: #7A2E36; --teal: #2E6B60;
+    --teal-ink: #163832; --mustard: #DB9F35; --mustard-ink: #6B4B0F;
+    --danger: #9A3A22; --line: #C9C0A6; --radius: 4px;
     --shadow: 0 1px 0 rgba(34,48,43,0.06);
     box-sizing: border-box;
     padding-top: env(safe-area-inset-top, 0px);
@@ -44,10 +34,8 @@
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    background: var(--bg);
-    color: var(--ink);
-    font-family: 'Inter', system-ui, sans-serif;
-    min-height: 100%;
+    background: var(--bg); color: var(--ink);
+    font-family: 'Inter', system-ui, sans-serif; min-height: 100%;
     -webkit-font-smoothing: antialiased;
   }
   .num { font-family: 'IBM Plex Mono', monospace; font-variant-numeric: tabular-nums; }
@@ -55,7 +43,6 @@
 
   /* ---- Layout ---- */
   .app { display: flex; min-height: 100vh; min-height: 100dvh; }
-
   .rail {
     width: 220px; flex-shrink: 0; background: var(--surface);
     border-right: 1px dashed var(--stitch);
@@ -66,9 +53,10 @@
   .brand-tag {
     width: 30px; height: 30px; border-radius: 6px; background: var(--rose);
     display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-    position: relative;
+    position: relative; overflow: hidden;
   }
-  .brand-tag::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--surface); position: absolute; top: 6px; left: 6px; }
+  .brand-tag img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .brand-tag.default-tag::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--surface); position: absolute; top: 6px; left: 6px; }
   .brand-title { font-size: 15px; line-height: 1.2; }
   .brand-sub { font-size: 11px; color: var(--ink-soft); }
 
@@ -83,15 +71,15 @@
   .nav-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: .5; flex-shrink: 0; }
 
   .rail-foot { margin-top: auto; padding: 12px 8px 4px; font-size: 11px; color: var(--ink-soft); border-top: 1px dashed var(--stitch); padding-top: 14px; }
-
   .main { flex: 1; min-width: 0; padding: 28px 32px 60px; max-width: 1100px; }
   .topbar { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 24px; gap: 12px; flex-wrap: wrap; }
   .topbar h1 { font-size: 24px; }
   .topbar .date { font-size: 13px; color: var(--ink-soft); }
 
-  /* ---- Cards (hang-tag style) ---- */
+  /* ---- Cards ---- */
   .grid { display: grid; gap: 14px; }
   .grid-4 { grid-template-columns: repeat(4, 1fr); }
+  .grid-3 { grid-template-columns: repeat(3, 1fr); }
   .grid-2 { grid-template-columns: 1.3fr 1fr; }
 
   .tag-card {
@@ -108,12 +96,12 @@
   .tag-card .value.pos { color: var(--teal-ink); }
   :root[data-theme="dark"] .tag-card .value.pos { color: var(--teal); }
   .tag-card .value.neg { color: var(--danger); }
-  .tag-card .sub { font-size: 12px; color: var(--ink-soft); margin-top: 4px; }
+  .tag-card .value.mustard { color: var(--mustard-ink); }
+  :root[data-theme="dark"] .tag-card .value.mustard { color: var(--mustard); }
 
   .panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; }
   .panel + .panel { margin-top: 14px; }
   .panel h3 { font-size: 15px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; gap: 8px; font-weight: 600; }
-  .panel h3 .btn { font-family: 'Inter', sans-serif; }
 
   /* ---- Buttons / inputs ---- */
   .btn {
@@ -125,100 +113,52 @@
   .btn.primary { background: var(--teal); color: #fff; border-color: var(--teal); }
   .btn.primary:hover { background: var(--teal-ink); border-color: var(--teal-ink); }
   .btn.danger-ghost { color: var(--danger); border-color: transparent; background: transparent; padding: 5px 8px; font-size: 12px; }
-  .btn.danger-ghost:hover { background: rgba(179,73,47,0.08); }
   .btn.sm { padding: 6px 10px; font-size: 12px; }
-  .btn:disabled { opacity: .45; cursor: not-allowed; }
 
   label { display: block; font-size: 12px; color: var(--ink-soft); margin: 10px 0 5px; font-weight: 600; }
-  label:first-child { margin-top: 0; }
   input, select, textarea {
     width: 100%; font: inherit; font-size: 14px; padding: 9px 10px;
     border: 1px solid var(--stitch); border-radius: var(--radius); background: var(--surface-2); color: var(--ink);
   }
-  input::placeholder, textarea::placeholder { color: var(--ink-soft); opacity: 0.9; }
-  input:focus, select:focus, textarea:focus { outline: 2px solid var(--teal); outline-offset: 1px; border-color: var(--teal); }
   .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
   .seg { display: flex; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
   .seg button { flex: 1; padding: 9px; font: inherit; font-size: 13px; font-weight: 600; background: var(--surface-2); border: none; color: var(--ink-soft); cursor: pointer; }
   .seg button.on.income { background: var(--teal); color: #fff; }
   .seg button.on.expense { background: var(--rose); color: #fff; }
 
-  /* ---- Table ---- */
+  /* ---- Table & Modals ---- */
   table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
   th { text-align: left; font-weight: 700; color: var(--ink-soft); font-size: 11.5px; padding: 0 10px 8px; border-bottom: 1px dashed var(--stitch); }
   td { padding: 10px; border-bottom: 1px solid var(--line); vertical-align: middle; }
-  tr:last-child td { border-bottom: none; }
   .pill { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; }
   .pill.income { background: rgba(46,107,96,0.13); color: var(--teal-ink); }
-  :root[data-theme="dark"] .pill.income { color: var(--teal); }
   .pill.expense { background: rgba(217,131,140,0.16); color: var(--rose-ink); }
-  :root[data-theme="dark"] .pill.expense { color: var(--rose); }
   .pill.low { background: rgba(219,159,53,0.18); color: var(--mustard-ink); }
-  :root[data-theme="dark"] .pill.low { color: var(--mustard); }
-  .amt.income { color: var(--teal-ink); } :root[data-theme="dark"] .amt.income { color: var(--teal); }
+  .amt.income { color: var(--teal-ink); }
   .amt.expense { color: var(--danger); }
   .empty { padding: 34px 10px; text-align: center; color: var(--ink-soft); font-size: 13.5px; }
-  .empty .headline { font-size: 16px; color: var(--ink); margin-bottom: 4px; }
-  .scroll-x { overflow-x: auto; }
 
-  /* ---- Modal ---- */
   .overlay {
     position: fixed; inset: 0; background: rgba(20,26,20,0.45); display: none;
     align-items: flex-start; justify-content: center; padding: 40px 16px; overflow-y: auto; z-index: 50;
   }
   .overlay.show { display: flex; }
-  .modal {
-    background: var(--surface); border-radius: 8px; width: 100%; max-width: 460px;
-    padding: 22px 22px 20px; border: 1px solid var(--line);
-  }
+  .modal { background: var(--surface); border-radius: 8px; width: 100%; max-width: 460px; padding: 22px; border: 1px solid var(--line); }
   .modal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
-  .modal-head h3 { font-size: 17px; }
-  .x { cursor: pointer; color: var(--ink-soft); font-size: 20px; line-height: 1; background: none; border: none; }
+  .x { cursor: pointer; color: var(--ink-soft); font-size: 20px; background: none; border: none; }
   .modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; }
 
-  /* bar chart */
-  .bars { display: flex; align-items: flex-end; gap: 10px; height: 150px; padding-top: 10px; }
-  .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; }
-  .bar-wrap { width: 100%; height: 120px; display: flex; align-items: flex-end; justify-content: center; gap: 3px; }
-  .bar { width: 40%; border-radius: 2px 2px 0 0; min-height: 2px; }
-  .bar.income { background: var(--teal); }
-  .bar.expense { background: var(--rose); }
-  .bar-label { font-size: 10.5px; color: var(--ink-soft); }
-  .legend { display: flex; gap: 16px; font-size: 12px; color: var(--ink-soft); margin-bottom: 6px; }
-  .legend span { display: inline-flex; align-items: center; gap: 5px; }
-  .legend i { width: 8px; height: 8px; border-radius: 2px; display: inline-block; }
-
-  .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
-  .filters select, .filters input { width: auto; }
-
-  .stock-bar-bg { width: 100%; height: 5px; background: var(--line); border-radius: 3px; overflow: hidden; margin-top: 4px; }
-  .stock-bar-fill { height: 100%; background: var(--teal); }
-  .stock-bar-fill.low { background: var(--mustard); }
-  .stock-bar-fill.out { background: var(--danger); }
-
   @media (max-width: 880px) {
-    .rail { position: fixed; left: 0; top: 0; bottom: 0; z-index: 40; transform: translateX(-100%); transition: transform .2s; box-shadow: 4px 0 18px rgba(0,0,0,0.2); }
+    .rail { position: fixed; left: 0; top: 0; bottom: 0; z-index: 40; transform: translateX(-100%); transition: transform .2s; }
     .rail.open { transform: translateX(0); }
     .main { padding: 18px 16px 60px; }
-    .grid-4 { grid-template-columns: 1fr 1fr; }
-    .grid-2 { grid-template-columns: 1fr; }
+    .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
     .menu-btn { display: inline-flex !important; }
     .rail-scrim { position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 39; display: none; }
     .rail-scrim.show { display: block; }
   }
   .menu-btn { display: none; }
-
-  .toolbar { display: flex; gap: 8px; flex-wrap: wrap; }
-
-  @media print {
-    .rail, .menu-btn, .topbar .btn, .toolbar, .filters, [data-del-trans], [data-edit-produk], [data-del-produk], #btnAddTrans, #btnAddProduk, #btnAddJual {
-      display: none !important;
-    }
-    .main { padding: 0; max-width: 100%; }
-    body { background: #fff; }
-    .panel, .tag-card { border: 1px solid #ccc; box-shadow: none; break-inside: avoid; }
-    a[href]::after { content: ""; }
-  }
 </style>
 </head>
 <body>
@@ -226,22 +166,22 @@
   <div class="rail-scrim" id="scrim"></div>
   <nav class="rail" id="rail">
     <div class="brand">
-      <div class="brand-tag"></div>
+      <div class="brand-tag default-tag" id="mainLogo"></div>
       <div>
         <div class="brand-title headline">Mubarak Kids</div>
-        <div class="brand-sub">Manajemen keuangan toko</div>
+        <div class="brand-sub">Manajemen toko</div>
       </div>
     </div>
-    <div class="nav-item" data-tab="dashboard"><span class="nav-dot"></span>Dashboard</div>
+    <div class="nav-item active" data-tab="dashboard"><span class="nav-dot"></span>Dashboard</div>
     <div class="nav-item" data-tab="penjualan"><span class="nav-dot"></span>Catat Penjualan</div>
+    <div class="nav-item" data-tab="omset"><span class="nav-dot"></span>Bagi Omset</div>
     <div class="nav-item" data-tab="transaksi"><span class="nav-dot"></span>Transaksi Kas</div>
     <div class="nav-item" data-tab="stok"><span class="nav-dot"></span>Stok Produk</div>
-    <div class="nav-item" data-tab="laporan"><span class="nav-dot"></span>Laporan</div>
     <div class="rail-foot">
-      <div id="syncBadge" style="font-weight:600;margin-bottom:8px;">○ Menyambungkan…</div>
-      <button class="btn sm" id="btnSecurity" style="width:100%;justify-content:center;">🔒 Keamanan</button>
-      <button class="btn sm" id="btnBackup" style="width:100%;justify-content:center;margin-top:6px;">🗄 Backup</button>
-      <div style="margin-top:8px;">Data tersimpan otomatis dan bisa diakses dari perangkat lain saat Anda masuk dengan akun yang sama.</div>
+      <div id="syncBadge" style="font-weight:600;margin-bottom:8px;">● Penyimpanan Lokal</div>
+      <button class="btn sm" id="btnLogoModal" style="width:100%;justify-content:center;margin-bottom:6px;">🖼 Ganti Logo</button>
+      <button class="btn sm" id="btnBackup" style="width:100%;justify-content:center;margin-bottom:6px;">🗄 Backup / G-Drive</button>
+      <button class="btn sm danger-ghost" id="btnResetData" style="width:100%;justify-content:center;">⚠️ Riset Data Lokal</button>
     </div>
   </nav>
 
@@ -251,7 +191,6 @@
         <button class="btn menu-btn sm" id="menuBtn">☰</button>
         <h1 id="pageTitle">Dashboard</h1>
       </div>
-      <div class="toolbar" id="toolbar"></div>
       <div class="date" id="todayDate"></div>
     </div>
     <div id="content"></div>
@@ -261,7 +200,7 @@
 <!-- Modal: Transaksi -->
 <div class="overlay" id="ovTrans">
   <div class="modal">
-    <div class="modal-head"><h3 id="transModalTitle">Tambah Transaksi</h3><button class="x" data-close>&times;</button></div>
+    <div class="modal-head"><h3>Tambah Transaksi Kas</h3><button class="x" data-close>&times;</button></div>
     <div class="seg" id="transTypeSeg">
       <button type="button" class="on income" data-type="income">Pemasukan</button>
       <button type="button" data-type="expense">Pengeluaran</button>
@@ -269,14 +208,14 @@
     <label>Kategori</label>
     <select id="tCategory"></select>
     <div class="row2">
-      <div><label>Jumlah (Rp)</label><input type="number" id="tAmount" min="0" placeholder="0"></div>
+      <div><label>Jumlah (Rp)</label><input type="number" id="tAmount" placeholder="0"></div>
       <div><label>Tanggal</label><input type="date" id="tDate"></div>
     </div>
-    <label>Catatan (opsional)</label>
-    <input type="text" id="tNote" placeholder="Contoh: bayar listrik toko">
+    <label>Catatan</label>
+    <input type="text" id="tNote" placeholder="Catatan transaksi...">
     <div class="modal-actions">
       <button class="btn" data-close>Batal</button>
-      <button class="btn primary" id="saveTrans">Simpan</button>
+      <button class="btn primary" id="saveTrans">Simpan Transaksi</button>
     </div>
   </div>
 </div>
@@ -284,25 +223,25 @@
 <!-- Modal: Produk -->
 <div class="overlay" id="ovProduk">
   <div class="modal">
-    <div class="modal-head"><h3 id="produkModalTitle">Tambah Produk</h3><button class="x" data-close>&times;</button></div>
+    <div class="modal-head"><h3>Tambah Produk</h3><button class="x" data-close>&times;</button></div>
     <input type="hidden" id="pId">
     <label>Nama Produk</label>
-    <input type="text" id="pName" placeholder="Contoh: Setelan Bayi Katun">
+    <input type="text" id="pName" placeholder="Contoh: Jumper Bayi Katun">
     <div class="row2">
-      <div><label>Ukuran</label><input type="text" id="pSize" placeholder="Contoh: 0-3 bulan"></div>
-      <div><label>Warna / Varian</label><input type="text" id="pColor" placeholder="Contoh: Krem"></div>
+      <div><label>Ukuran</label><input type="text" id="pSize" placeholder="S, M, L"></div>
+      <div><label>Warna / Varian</label><input type="text" id="pColor" placeholder="Merah, Biru"></div>
     </div>
     <div class="row2">
-      <div><label>Harga Beli / Modal (Rp)</label><input type="number" id="pBuy" min="0" placeholder="0"></div>
-      <div><label>Harga Jual (Rp)</label><input type="number" id="pSell" min="0" placeholder="0"></div>
+      <div><label>Modal (Rp)</label><input type="number" id="pBuy" placeholder="0"></div>
+      <div><label>Harga Jual (Rp)</label><input type="number" id="pSell" placeholder="0"></div>
     </div>
     <div class="row2">
-      <div><label>Stok Saat Ini</label><input type="number" id="pStock" min="0" placeholder="0"></div>
-      <div><label>Batas Stok Menipis</label><input type="number" id="pMin" min="0" placeholder="3"></div>
+      <div><label>Stok Awal</label><input type="number" id="pStock" placeholder="0"></div>
+      <div><label>Batas Stok Menipis</label><input type="number" id="pMin" value="3"></div>
     </div>
     <div class="modal-actions">
       <button class="btn" data-close>Batal</button>
-      <button class="btn primary" id="saveProduk">Simpan</button>
+      <button class="btn primary" id="saveProduk">Simpan Produk</button>
     </div>
   </div>
 </div>
@@ -311,19 +250,16 @@
 <div class="overlay" id="ovJual">
   <div class="modal">
     <div class="modal-head"><h3>Catat Penjualan</h3><button class="x" data-close>&times;</button></div>
-    <label>Produk</label>
+    <label>Pilih Produk</label>
     <select id="jProduct"></select>
     <div class="row2">
-      <div><label>Jumlah Terjual</label><input type="number" id="jQty" min="1" value="1"></div>
-      <div><label>Harga Jual / pcs (Rp)</label><input type="number" id="jPrice" min="0"></div>
+      <div><label>Jumlah (Qty)</label><input type="number" id="jQty" value="1" min="1"></div>
+      <div><label>Harga Satuan (Rp)</label><input type="number" id="jPrice"></div>
     </div>
     <div class="row2">
       <div><label>Tanggal</label><input type="date" id="jDate"></div>
-      <div><label>Ongkos Kirim ditanggung toko (Rp, opsional)</label><input type="number" id="jShip" min="0" placeholder="0"></div>
+      <div><label>Ongkir Ditanggung Toko (Rp)</label><input type="number" id="jShip" value="0"></div>
     </div>
-    <label>Catatan (opsional)</label>
-    <input type="text" id="jNote" placeholder="Contoh: order via Instagram">
-    <div class="sub" id="jPreview" style="margin-top:10px;font-size:12.5px;color:var(--ink-soft);"></div>
     <div class="modal-actions">
       <button class="btn" data-close>Batal</button>
       <button class="btn primary" id="saveJual">Simpan Penjualan</button>
@@ -331,34 +267,31 @@
   </div>
 </div>
 
-<!-- Modal: Keamanan / PIN -->
-<div class="overlay" id="ovSecurity">
+<!-- Modal Logo -->
+<div class="overlay" id="ovLogo">
   <div class="modal">
-    <div class="modal-head"><h3>Kunci PIN</h3><button class="x" data-close>&times;</button></div>
-    <div id="securityBody"></div>
+    <div class="modal-head"><h3>Pengaturan Logo Toko</h3><button class="x" data-close>&times;</button></div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+      <div class="brand-tag default-tag" id="previewLogoModal" style="width:48px;height:48px;"></div>
+      <div>
+        <input type="file" id="logoFileInput" accept="image/*" style="display:none;">
+        <button class="btn sm" id="btnChooseLogo">Pilih Gambar...</button>
+        <button class="btn danger-ghost sm" id="btnRemoveLogo">Hapus Logo</button>
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- Lock screen -->
-<div class="overlay" id="lockScreen" style="background:var(--bg);align-items:center;z-index:100;">
-  <div class="modal" style="max-width:340px;text-align:center;">
-    <div class="brand-tag" style="margin:0 auto 14px;width:36px;height:36px;"></div>
-    <h3 class="headline" style="font-size:19px;margin-bottom:4px;">Mubarak Kids</h3>
-    <div style="font-size:13px;color:var(--ink-soft);margin-bottom:18px;">Masukkan PIN untuk membuka</div>
-    <form id="lockForm">
-      <input type="password" inputmode="numeric" id="lockPin" maxlength="8" placeholder="••••" autocomplete="off" style="text-align:center;font-size:22px;letter-spacing:6px;">
-      <div id="lockError" style="color:var(--danger);font-size:12.5px;margin-top:8px;min-height:16px;"></div>
-      <button type="submit" class="btn primary" style="width:100%;justify-content:center;margin-top:10px;">Buka</button>
-    </form>
-    <button type="button" id="lockForgot" class="btn" style="width:100%;justify-content:center;margin-top:8px;background:transparent;border-color:transparent;color:var(--ink-soft);font-weight:500;">Lupa PIN?</button>
-  </div>
-</div>
-
-<!-- Modal: Backup & Pemulihan -->
+<!-- Modal Backup -->
 <div class="overlay" id="ovBackup">
   <div class="modal" style="max-width:520px;">
-    <div class="modal-head"><h3>Backup &amp; Pemulihan</h3><button class="x" data-close>&times;</button></div>
-    <div id="backupBody"></div>
+    <div class="modal-head"><h3>Backup &amp; Google Drive Live Sync</h3><button class="x" data-close>&times;</button></div>
+    <label>Google Apps Script Web App URL</label>
+    <input type="text" id="gdriveScriptUrl" placeholder="https://script.google.com/macros/s/.../exec">
+    <div style="display:flex;gap:8px;margin-top:8px;">
+      <button class="btn sm primary" id="btnSaveScriptUrl">Simpan URL</button>
+      <button class="btn sm" id="btnTestSync">Tes Sync</button>
+    </div>
   </div>
 </div>
 
@@ -366,982 +299,251 @@
 (function(){
   "use strict";
   const STORAGE_KEY = "kbb_finance_v1";
-  const EXPENSE_CATS = ["Belanja Stok Baju", "Ongkos Kirim", "Kemasan & Packing", "Marketing / Iklan", "Sewa & Operasional Toko", "Gaji / Bantuan Pegawai", "Lainnya"];
+  const EXPENSE_CATS = ["Belanja Stok Baju", "Ongkos Kirim", "Kemasan & Packing", "Marketing / Iklan", "Sewa & Operasional", "Lainnya"];
   const INCOME_CATS = ["Penjualan Produk", "Pemasukan Lain"];
+  
+  let state = { products: [], transactions: [], logo: '' };
+  let currentTab = 'dashboard';
 
-  let state = { products: [], transactions: [], security: { enabled: false, salt: '', hash: '' } };
-  let dbCap = null;
-  let stateDocRef = null;
-  let dbWriteChain = Promise.resolve();
-  let syncStatus = 'local'; // 'local' | 'connecting' | 'synced' | 'offline'
-
+  // Siste Perbaikan Otomatis Data Lokal
   function loadLocal(){
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) state = JSON.parse(raw);
-    } catch(e){ console.error("Load error", e); }
-    if (!state.security) state.security = { enabled: false, salt: '', hash: '' };
-  }
-  function saveLocal(){
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
-    catch(e){ console.error("Save error", e); }
-  }
-  function save(){
-    // Always keep a local copy as offline cache.
-    saveLocal();
-    if (dbCap && stateDocRef) {
-      dbWriteChain = dbWriteChain.then(()=>
-        stateDocRef.set({ products: state.products, transactions: state.transactions, security: state.security, updatedAt: new Date().toISOString() })
-      ).catch(e=>{ console.error('Sinkronisasi gagal', e); syncStatus = 'offline'; updateSyncBadge(); });
-      maybeAutoBackup();
-    }
-  }
-  async function initSync(){
-    try {
-      dbCap = (window.claude && window.claude.use) ? await window.claude.use('db') : null;
-    } catch(e){ dbCap = null; }
-    if (!dbCap) {
-      loadLocal();
-      syncStatus = 'local';
-      updateSyncBadge();
-      maybeGate();
-      return;
-    }
-    syncStatus = 'connecting';
-    stateDocRef = dbCap.doc('data/state');
-    stateDocRef.onSnapshot(
-      (snap) => {
-        if (snap.exists) {
-          const d = snap.data();
-          state = { products: d.products || [], transactions: d.transactions || [], security: d.security || { enabled: false, salt: '', hash: '' } };
-        } else if (syncStatus === 'connecting') {
-          // First time this artifact syncs: seed cloud with any local data found.
-          loadLocal();
-          if (state.products.length || state.transactions.length) save();
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === 'object') {
+          state.products = Array.isArray(parsed.products) ? parsed.products : [];
+          state.transactions = Array.isArray(parsed.transactions) ? parsed.transactions : [];
+          state.logo = parsed.logo || '';
         }
-        syncStatus = 'synced';
-        updateSyncBadge();
-        maybeGate();
-      },
-      (err) => {
-        console.error('Sync error', err);
-        loadLocal();
-        syncStatus = 'offline';
-        updateSyncBadge();
-        maybeGate();
       }
-    );
-  }
-  function updateSyncBadge(){
-    const el = document.getElementById('syncBadge');
-    if (!el) return;
-    const map = {
-      synced: ['● Tersinkron', ''],
-      connecting: ['○ Menyambungkan…', ''],
-      offline: ['● Tersimpan lokal (offline)', 'color:var(--mustard-ink)'],
-      local: ['● Tersimpan di perangkat ini', ''],
-    };
-    const [txt, style] = map[syncStatus] || map.local;
-    el.textContent = txt;
-    el.setAttribute('style', style);
-  }
-
-  // ---------- PIN lock (device-level convenience lock, not account security) ----------
-  const UNLOCK_KEY = 'kbb_unlocked';
-  async function sha256Hex(str){
-    const enc = new TextEncoder().encode(str);
-    const buf = await crypto.subtle.digest('SHA-256', enc);
-    return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
-  }
-  function randomSalt(){
-    return Array.from(crypto.getRandomValues(new Uint8Array(8))).map(b=>b.toString(16).padStart(2,'0')).join('');
-  }
-  function isLocked(){
-    return !!(state.security && state.security.enabled) && sessionStorage.getItem(UNLOCK_KEY) !== '1';
-  }
-  function maybeGate(){
-    if (isLocked()) showLock(); else { hideLock(); render(); }
-  }
-  function showLock(){
-    document.querySelector('.app').style.display = 'none';
-    const ls = document.getElementById('lockScreen');
-    ls.classList.add('show');
-    document.getElementById('lockError').textContent = '';
-    document.getElementById('lockPin').value = '';
-    setTimeout(()=>document.getElementById('lockPin').focus(), 50);
-  }
-  function hideLock(){
-    document.getElementById('lockScreen').classList.remove('show');
-    document.querySelector('.app').style.display = 'flex';
-  }
-  document.getElementById('lockForm').addEventListener('submit', async (e)=>{
-    e.preventDefault();
-    const pin = document.getElementById('lockPin').value;
-    const sec = state.security;
-    const h = await sha256Hex(sec.salt + pin);
-    if (h === sec.hash) {
-      sessionStorage.setItem(UNLOCK_KEY, '1');
-      hideLock();
-      render();
-    } else {
-      document.getElementById('lockError').textContent = 'PIN salah, coba lagi.';
-      document.getElementById('lockPin').value = '';
-      document.getElementById('lockPin').focus();
-    }
-  });
-  document.getElementById('lockForgot').addEventListener('click', ()=>{
-    if (!confirm('Ini akan menonaktifkan kunci PIN (data usaha tidak akan terhapus). Lanjutkan?')) return;
-    state.security = { enabled: false, salt: '', hash: '' };
-    save();
-    sessionStorage.removeItem(UNLOCK_KEY);
-    hideLock();
-    render();
-  });
-
-  // ---------- Automatic cloud backups ----------
-  const BACKUP_RETAIN = 30; // keep last N daily snapshots
-  let lastBackupWriteAt = 0;
-  function maybeAutoBackup(){
-    if (!dbCap) return;
-    const now = Date.now();
-    if (now - lastBackupWriteAt < 60000) return; // throttle: at most once per minute
-    lastBackupWriteAt = now;
-    const day = todayStr();
-    dbCap.collection('backups').doc(day).set({
-      products: state.products,
-      transactions: state.transactions,
-      savedAt: new Date().toISOString(),
-    }).then(pruneOldBackups).catch(e=>console.error('Backup otomatis gagal', e));
-  }
-  async function pruneOldBackups(){
-    try {
-      const snap = await dbCap.collection('backups').limit(200).get();
-      const docs = snap.docs.slice().sort((a,b)=> a.id.localeCompare(b.id)); // oldest first
-      if (docs.length > BACKUP_RETAIN) {
-        const toDelete = docs.slice(0, docs.length - BACKUP_RETAIN);
-        for (const d of toDelete) { await dbCap.collection('backups').doc(d.id).delete(); }
-      }
-    } catch(e){ console.error('Gagal membersihkan backup lama', e); }
-  }
-  async function listBackups(){
-    if (!dbCap) return [];
-    try {
-      const snap = await dbCap.collection('backups').limit(60).get();
-      return snap.docs
-        .map(d => ({ id: d.id, data: d.data() }))
-        .sort((a,b)=> b.id.localeCompare(a.id)); // newest first
-    } catch(e){ console.error('Gagal memuat daftar backup', e); return []; }
-  }
-  async function restoreBackup(id){
-    if (!dbCap) return;
-    if (!confirm('Pulihkan data ke kondisi tanggal ' + id + '? Data saat ini akan diganti dengan data backup tersebut.')) return;
-    try {
-      const doc = await dbCap.collection('backups').doc(id).get();
-      if (!doc.exists) { alert('Backup tidak ditemukan.'); return; }
-      const d = doc.data();
-      state.products = d.products || [];
-      state.transactions = d.transactions || [];
+    } catch(e) {
+      console.error("Auto Repair Triggered", e);
+      state = { products: [], transactions: [], logo: '' };
       save();
-      closeModal(ovBackup);
-      maybeGate();
-      alert('Data berhasil dipulihkan dari backup tanggal ' + id + '.');
-    } catch(e){ console.error(e); alert('Gagal memulihkan backup.'); }
-  }
-  function exportBackupJSON(){
-    const payload = {
-      app: 'Mubarak Kids', exportedAt: new Date().toISOString(),
-      products: state.products, transactions: state.transactions
-    };
-    downloadJSONFile('backup-mubarak-kids-' + todayStr() + '.json', JSON.stringify(payload, null, 2));
-  }
-  async function downloadJSONFile(filename, dataStr){
-    const dl = await getDownloads();
-    if (dl) {
-      try { await dl.save({ filename, data: dataStr }); return; }
-      catch(e){ console.error(e); alert('Unduhan dibatalkan atau gagal.'); return; }
     }
-    try {
-      const blob = new Blob([dataStr], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url; a.download = filename;
-      document.body.appendChild(a); a.click(); document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    } catch(e){ alert('Unduhan file tidak tersedia di tampilan ini.'); }
-  }
-  function importBackupFile(file){
-    const reader = new FileReader();
-    reader.onload = () => {
-      try {
-        const parsed = JSON.parse(reader.result);
-        if (!Array.isArray(parsed.products) || !Array.isArray(parsed.transactions)) throw new Error('format tidak sesuai');
-        if (!confirm('Pulihkan data dari file ini? Data yang sedang tersimpan akan diganti.')) return;
-        state.products = parsed.products;
-        state.transactions = parsed.transactions;
-        save();
-        closeModal(ovBackup);
-        maybeGate();
-        alert('Data berhasil dipulihkan dari file.');
-      } catch(e){ alert('File backup tidak valid.'); }
-    };
-    reader.readAsText(file);
+    updateLogoDisplay();
   }
 
-  const ovBackup = document.getElementById('ovBackup');
-  async function renderBackupModal(){
-    const body = document.getElementById('backupBody');
-    body.innerHTML = `<div style="font-size:13px;color:var(--ink-soft);">Memuat daftar backup…</div>`;
-    const cloudOn = !!dbCap;
-    const list = cloudOn ? await listBackups() : [];
-    body.innerHTML = `
-      <p style="font-size:13px;color:var(--ink-soft);">
-        ${cloudOn
-          ? 'Setiap perubahan otomatis disimpan sebagai backup harian di cloud (30 hari terakhir). Anda bisa memulihkan ke salah satu tanggal di bawah.'
-          : 'Backup cloud otomatis belum aktif untuk tampilan ini; data hanya tersimpan lokal. Gunakan unduh/pulihkan file di bawah sebagai cadangan.'}
-      </p>
-      ${cloudOn ? `
-      <div class="scroll-x" style="max-height:220px;overflow-y:auto;border:1px solid var(--line);border-radius:var(--radius);margin:10px 0;">
-        <table>
-          <thead><tr><th>Tanggal Backup</th><th>Produk</th><th>Transaksi</th><th></th></tr></thead>
-          <tbody>
-            ${list.length ? list.map(b => `
-              <tr>
-                <td>${fmtDate(b.id)}</td>
-                <td class="num">${(b.data.products||[]).length}</td>
-                <td class="num">${(b.data.transactions||[]).length}</td>
-                <td><button class="btn sm" data-restore="${b.id}">Pulihkan</button></td>
-              </tr>`).join('') : `<tr><td colspan="4" style="color:var(--ink-soft);">Belum ada backup otomatis tersimpan.</td></tr>`}
-          </tbody>
-        </table>
-      </div>` : ''}
-      <div style="border-top:1px dashed var(--stitch);margin-top:14px;padding-top:14px;">
-        <h3 style="font-size:14px;margin-bottom:8px;">Cadangan manual (file)</h3>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <button class="btn sm" id="btnExportBackup">Unduh Backup (JSON)</button>
-          <button class="btn sm" id="btnImportBackup">Pulihkan dari File…</button>
-          <input type="file" id="importFileInput" accept="application/json" style="display:none;">
-        </div>
-        <div style="font-size:12px;color:var(--ink-soft);margin-top:6px;">Simpan file ini di tempat lain (Google Drive, email, dll) sebagai cadangan tambahan di luar aplikasi.</div>
-      </div>
-    `;
-    document.getElementById('btnExportBackup').addEventListener('click', exportBackupJSON);
-    document.getElementById('btnImportBackup').addEventListener('click', ()=> document.getElementById('importFileInput').click());
-    document.getElementById('importFileInput').addEventListener('change', (e)=>{
-      const f = e.target.files[0];
-      if (f) importBackupFile(f);
-      e.target.value = '';
-    });
-    document.querySelectorAll('[data-restore]').forEach(el=>{
-      el.addEventListener('click', ()=> restoreBackup(el.dataset.restore));
-    });
+  function save(){
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e){}
+    updateLogoDisplay();
+    syncToGoogleDrive();
   }
-  document.getElementById('btnBackup').addEventListener('click', ()=>{
-    renderBackupModal();
-    openModal(ovBackup);
-  });
 
-  // ---------- Security settings modal ----------
-  const ovSecurity = document.getElementById('ovSecurity');
-  function renderSecurityModal(){
-    const sec = state.security || { enabled: false };
-    const body = document.getElementById('securityBody');
-    if (!sec.enabled) {
-      body.innerHTML = `
-        <p style="font-size:13px;color:var(--ink-soft);margin-bottom:4px;">Buat PIN 4–8 digit. Setiap kali aplikasi dibuka di perangkat ini, PIN akan diminta lebih dulu.</p>
-        <label>PIN Baru</label>
-        <input type="password" inputmode="numeric" id="secPinNew" maxlength="8" placeholder="••••">
-        <label>Ulangi PIN</label>
-        <input type="password" inputmode="numeric" id="secPinConfirm" maxlength="8" placeholder="••••">
-        <div class="sub" id="secError" style="color:var(--danger);margin-top:8px;font-size:12.5px;"></div>
-        <div class="modal-actions">
-          <button class="btn" data-close>Batal</button>
-          <button class="btn primary" id="secEnableBtn">Aktifkan Kunci PIN</button>
-        </div>`;
-      document.getElementById('secEnableBtn').addEventListener('click', async ()=>{
-        const p1 = document.getElementById('secPinNew').value;
-        const p2 = document.getElementById('secPinConfirm').value;
-        const err = document.getElementById('secError');
-        if (!/^\d{4,8}$/.test(p1)) { err.textContent = 'PIN harus 4–8 digit angka.'; return; }
-        if (p1 !== p2) { err.textContent = 'PIN tidak sama.'; return; }
-        const salt = randomSalt();
-        const hash = await sha256Hex(salt + p1);
-        state.security = { enabled: true, salt, hash };
-        save();
-        sessionStorage.setItem(UNLOCK_KEY, '1');
-        closeModal(ovSecurity);
-      });
-    } else {
-      body.innerHTML = `
-        <p style="font-size:13px;color:var(--ink-soft);margin-bottom:4px;">Kunci PIN sedang aktif.</p>
-        <label>PIN Saat Ini</label>
-        <input type="password" inputmode="numeric" id="secPinOld" maxlength="8" placeholder="••••">
-        <label>PIN Baru (kosongkan jika hanya ingin mematikan kunci)</label>
-        <input type="password" inputmode="numeric" id="secPinNew2" maxlength="8" placeholder="••••">
-        <div class="sub" id="secError" style="color:var(--danger);margin-top:8px;font-size:12.5px;"></div>
-        <div class="modal-actions">
-          <button class="btn" data-close>Batal</button>
-          <button class="btn danger-ghost" id="secDisableBtn" style="border:1px solid var(--line);">Matikan Kunci</button>
-          <button class="btn primary" id="secChangeBtn">Simpan PIN Baru</button>
-        </div>`;
-      async function verifyOld(){
-        const old = document.getElementById('secPinOld').value;
-        const h = await sha256Hex(state.security.salt + old);
-        return h === state.security.hash;
+  function updateLogoDisplay(){
+    const mainLogo = document.getElementById('mainLogo');
+    const prevLogo = document.getElementById('previewLogoModal');
+    [mainLogo, prevLogo].forEach(el => {
+      if(!el) return;
+      if(state.logo) {
+        el.classList.remove('default-tag');
+        el.innerHTML = `<img src="${state.logo}">`;
+      } else {
+        el.classList.add('default-tag');
+        el.innerHTML = '';
       }
-      document.getElementById('secDisableBtn').addEventListener('click', async ()=>{
-        const err = document.getElementById('secError');
-        if (!(await verifyOld())) { err.textContent = 'PIN saat ini salah.'; return; }
-        state.security = { enabled: false, salt: '', hash: '' };
-        save();
-        closeModal(ovSecurity);
-      });
-      document.getElementById('secChangeBtn').addEventListener('click', async ()=>{
-        const err = document.getElementById('secError');
-        if (!(await verifyOld())) { err.textContent = 'PIN saat ini salah.'; return; }
-        const p1 = document.getElementById('secPinNew2').value;
-        if (!p1) { err.textContent = 'Isi PIN baru, atau gunakan "Matikan Kunci".'; return; }
-        if (!/^\d{4,8}$/.test(p1)) { err.textContent = 'PIN baru harus 4–8 digit angka.'; return; }
-        const salt = randomSalt();
-        const hash = await sha256Hex(salt + p1);
-        state.security = { enabled: true, salt, hash };
-        save();
-        closeModal(ovSecurity);
-      });
-    }
+    });
   }
-  document.getElementById('btnSecurity').addEventListener('click', ()=>{
-    renderSecurityModal();
-    openModal(ovSecurity);
-  });
-  function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+
+  function syncToGoogleDrive(){
+    const url = localStorage.getItem('gdrive_webhook_url');
+    const badge = document.getElementById('syncBadge');
+    if (!url) { if(badge) badge.textContent = '● Penyimpanan Lokal'; return; }
+    if(badge) badge.textContent = '○ Menyinkronkan...';
+    fetch(url, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(state) })
+    .then(() => { if(badge) badge.textContent = '● Live-Sync G-Drive Aktif'; })
+    .catch(() => { if(badge) badge.textContent = '● Sync Gagal (Lokal)'; });
+  }
+
+  function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,5); }
   function todayStr(){ return new Date().toISOString().slice(0,10); }
-  function rupiah(n){
-    n = Math.round(Number(n)||0);
-    return "Rp " + n.toLocaleString('id-ID');
-  }
-  function fmtDate(s){
-    const d = new Date(s + "T00:00:00");
-    return d.toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'numeric' });
-  }
-  function monthKey(s){ return s.slice(0,7); }
+  function rupiah(n){ return "Rp " + (Math.round(Number(n)||0)).toLocaleString('id-ID'); }
 
-  // ---------- Export: CSV (Excel) & Print (PDF) ----------
-  let _downloadsCap;
-  async function getDownloads(){
-    if (_downloadsCap !== undefined) return _downloadsCap;
-    try { _downloadsCap = window.claude && window.claude.use ? await window.claude.use('downloads') : null; }
-    catch(e){ _downloadsCap = null; }
-    return _downloadsCap;
-  }
-  function csvCell(v){
-    v = String(v === undefined || v === null ? '' : v);
-    if (/[",\n]/.test(v)) v = '"' + v.replace(/"/g,'""') + '"';
-    return v;
-  }
-  function toCSV(rows){ return rows.map(r=>r.map(csvCell).join(',')).join('\r\n'); }
-  async function downloadCSV(filename, rows){
-    const csv = '\uFEFF' + toCSV(rows);
-    const dl = await getDownloads();
-    if (dl) {
-      try { await dl.save({ filename, data: csv }); return; }
-      catch(e){ console.error('download gagal', e); alert('Unduhan dibatalkan atau gagal.'); return; }
-    }
-    try {
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url; a.download = filename;
-      document.body.appendChild(a); a.click(); document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    } catch(e){ alert('Unduhan file tidak tersedia di tampilan ini.'); }
-  }
-
-  function exportTransaksiCSV(){
-    const rows = [['Tanggal','Jenis','Kategori','Catatan','Jumlah (Rp)']];
-    let list = [...state.transactions];
-    const fType = document.getElementById('fType');
-    const fMonth = document.getElementById('fMonth');
-    if (fType && fType.value !== 'all') list = list.filter(t=>t.type===fType.value);
-    if (fMonth && fMonth.value !== 'all') list = list.filter(t=>monthKey(t.date)===fMonth.value);
-    list.sort((a,b)=>a.date.localeCompare(b.date));
-    list.forEach(t=> rows.push([fmtDate(t.date), t.type==='income'?'Pemasukan':'Pengeluaran', t.category, t.note||'', Math.round(t.amount)]));
-    downloadCSV('transaksi-kas.csv', rows);
-  }
-  function exportStokCSV(){
-    const rows = [['Produk','Ukuran','Varian','Modal (Rp)','Harga Jual (Rp)','Stok','Batas Stok Menipis']];
-    [...state.products].sort((a,b)=>a.name.localeCompare(b.name)).forEach(p=>{
-      rows.push([p.name, p.size||'', p.color||'', Math.round(p.buyPrice), Math.round(p.sellPrice), p.stock, p.minStock ?? 3]);
-    });
-    downloadCSV('stok-produk.csv', rows);
-  }
-  function exportPenjualanCSV(){
-    const rows = [['Tanggal','Produk','Qty','Harga/pcs (Rp)','Total (Rp)','Ongkir Ditanggung (Rp)','Estimasi Laba (Rp)']];
-    [...state.transactions].filter(t=>t.productId).sort((a,b)=>a.date.localeCompare(b.date)).forEach(t=>{
-      const p = state.products.find(pp=>pp.id===t.productId);
-      const cost = p ? Number(p.buyPrice)*Number(t.qty||0) : 0;
-      const profit = Number(t.amount) - cost - Number(t.shipCost||0);
-      rows.push([fmtDate(t.date), p ? p.name : '(produk dihapus)', t.qty, Math.round(t.amount/t.qty), Math.round(t.amount), Math.round(t.shipCost||0), Math.round(profit)]);
-    });
-    downloadCSV('penjualan.csv', rows);
-  }
-  function exportLaporanCSV(){
-    const months = last6Months();
-    const rows = [['Laporan Keuangan — Mubarak Kids'], []];
-    rows.push(['Ringkasan 6 Bulan Terakhir']);
-    rows.push(['Bulan','Pemasukan (Rp)','Pengeluaran (Rp)','Laba (Rp)']);
-    months.forEach(m=>{
-      const list = state.transactions.filter(t=>monthKey(t.date)===m.key);
-      const inc = sumBy(list,'income'), exp = sumBy(list,'expense');
-      rows.push([m.key, Math.round(inc), Math.round(exp), Math.round(inc-exp)]);
-    });
-    rows.push([]);
-    const totalIncome = sumBy(state.transactions,'income');
-    const totalExpense = sumBy(state.transactions,'expense');
-    rows.push(['Total Pemasukan (Rp)', Math.round(totalIncome)]);
-    rows.push(['Total Pengeluaran (Rp)', Math.round(totalExpense)]);
-    rows.push(['Laba Bersih (Rp)', Math.round(totalIncome-totalExpense)]);
-    rows.push(['Margin Laba (%)', totalIncome>0 ? ((totalIncome-totalExpense)/totalIncome*100).toFixed(1) : '0']);
-    rows.push([]);
-    rows.push(['Produk Terlaris']);
-    rows.push(['Produk','Qty Terjual']);
-    bestSellers(20).forEach(b=> rows.push([b.product.name, b.qty]));
-    downloadCSV('laporan-keuangan.csv', rows);
-  }
-  function printPage(){ window.print(); }
-  function escapeHtml(s){
-    return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  }
-
-  let currentTab = "dashboard";
-
-  // ---------- Derived data helpers ----------
-  function thisMonthKey(){ return todayStr().slice(0,7); }
-
-  function txThisMonth(){
-    const mk = thisMonthKey();
-    return state.transactions.filter(t => monthKey(t.date) === mk);
-  }
-  function sumBy(list, type){
-    return list.filter(t => t.type === type).reduce((a,t)=>a+Number(t.amount), 0);
-  }
-  function allTimeBalance(){
-    const inc = sumBy(state.transactions, 'income');
-    const exp = sumBy(state.transactions, 'expense');
-    return inc - exp;
-  }
-  function lowStockProducts(){
-    return state.products.filter(p => Number(p.stock) <= Number(p.minStock ?? 3));
-  }
-  function bestSellers(limit){
-    const map = {};
-    state.transactions.forEach(t => {
-      if (t.type === 'income' && t.productId) {
-        map[t.productId] = (map[t.productId]||0) + Number(t.qty||0);
-      }
-    });
-    return Object.entries(map)
-      .map(([pid, qty]) => ({ product: state.products.find(p=>p.id===pid), qty }))
-      .filter(x => x.product)
-      .sort((a,b)=>b.qty-a.qty)
-      .slice(0, limit||5);
-  }
-  function last6Months(){
-    const arr = [];
-    const now = new Date();
-    for (let i=5;i>=0;i--){
-      const d = new Date(now.getFullYear(), now.getMonth()-i, 1);
-      const key = d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,'0');
-      arr.push({ key, label: d.toLocaleDateString('id-ID', {month:'short'}) });
-    }
-    return arr;
-  }
-
-  // ---------- Renderers ----------
   function render(){
-    document.getElementById('todayDate').textContent = fmtDate(todayStr());
-    document.querySelectorAll('.nav-item').forEach(el => {
-      el.classList.toggle('active', el.dataset.tab === currentTab);
-    });
-    const titles = { dashboard:"Dashboard", penjualan:"Catat Penjualan", transaksi:"Transaksi Kas", stok:"Stok Produk", laporan:"Laporan" };
+    document.getElementById('todayDate').textContent = new Date().toLocaleDateString('id-ID', {day:'numeric', month:'short', year:'numeric'});
+    document.querySelectorAll('.nav-item').forEach(el => el.classList.toggle('active', el.dataset.tab === currentTab));
+    const titles = { dashboard:"Dashboard", penjualan:"Catat Penjualan", omset:"Bagi Omset", transaksi:"Transaksi Kas", stok:"Stok Produk" };
     document.getElementById('pageTitle').textContent = titles[currentTab];
-    const toolbar = document.getElementById('toolbar');
-    const exportMap = { transaksi: exportTransaksiCSV, stok: exportStokCSV, penjualan: exportPenjualanCSV, laporan: exportLaporanCSV };
-    const exportFn = exportMap[currentTab];
-    toolbar.innerHTML = (exportFn ? `<button class="btn sm" id="btnExportCsv">Unduh Excel (CSV)</button>` : '')
-      + `<button class="btn sm" id="btnPrint">Cetak / Simpan PDF</button>`;
-    const btnExport = document.getElementById('btnExportCsv');
-    if (btnExport) btnExport.addEventListener('click', exportFn);
-    document.getElementById('btnPrint').addEventListener('click', printPage);
     const c = document.getElementById('content');
-    if (currentTab === 'dashboard') c.innerHTML = renderDashboard();
-    else if (currentTab === 'transaksi') c.innerHTML = renderTransaksi();
-    else if (currentTab === 'stok') c.innerHTML = renderStok();
-    else if (currentTab === 'penjualan') c.innerHTML = renderPenjualanTab();
-    else if (currentTab === 'laporan') c.innerHTML = renderLaporan();
-    attachDynamicHandlers();
-  }
 
-  function renderDashboard(){
-    const mIncome = sumBy(txThisMonth(), 'income');
-    const mExpense = sumBy(txThisMonth(), 'expense');
-    const profit = mIncome - mExpense;
-    const balance = allTimeBalance();
-    const low = lowStockProducts();
-    const best = bestSellers(4);
-    const recent = [...state.transactions].sort((a,b)=> b.date.localeCompare(a.date) || b.id.localeCompare(a.id)).slice(0,6);
-
-    return `
-      <div class="grid grid-4">
-        <div class="tag-card">
-          <div class="label">Pemasukan bulan ini</div>
-          <div class="value pos num">${rupiah(mIncome)}</div>
+    if (currentTab === 'dashboard') {
+      const inc = state.transactions.filter(t=>t.type==='income').reduce((a,b)=>a+b.amount,0);
+      const exp = state.transactions.filter(t=>t.type==='expense').reduce((a,b)=>a+b.amount,0);
+      c.innerHTML = `
+        <div class="grid grid-4">
+          <div class="tag-card"><div class="label">Total Pemasukan</div><div class="value pos num">${rupiah(inc)}</div></div>
+          <div class="tag-card"><div class="label">Total Pengeluaran</div><div class="value neg num">${rupiah(exp)}</div></div>
+          <div class="tag-card"><div class="label">Laba Bersih</div><div class="value pos num">${rupiah(inc - exp)}</div></div>
+          <div class="tag-card"><div class="label">Total Stok</div><div class="value mustard num">${state.products.reduce((a,b)=>a+Number(b.stock),0)} pcs</div></div>
         </div>
-        <div class="tag-card">
-          <div class="label">Pengeluaran bulan ini</div>
-          <div class="value neg num">${rupiah(mExpense)}</div>
-        </div>
-        <div class="tag-card">
-          <div class="label">Laba bersih bulan ini</div>
-          <div class="value ${profit>=0?'pos':'neg'} num">${rupiah(profit)}</div>
-        </div>
-        <div class="tag-card">
-          <div class="label">Saldo kas keseluruhan</div>
-          <div class="value num">${rupiah(balance)}</div>
-        </div>
-      </div>
-
-      <div class="grid grid-2" style="margin-top:14px;">
+      `;
+    } else if (currentTab === 'stok') {
+      c.innerHTML = `
         <div class="panel">
-          <h3>Transaksi terbaru</h3>
-          ${recent.length ? `
-          <div class="scroll-x"><table>
-            <thead><tr><th>Tanggal</th><th>Kategori</th><th>Catatan</th><th style="text-align:right;">Jumlah</th></tr></thead>
+          <h3>Daftar Stok Produk <button class="btn primary sm" id="btnAddProduk">+ Tambah Produk</button></h3>
+          ${!state.products.length ? `<div class="empty">Belum ada produk tersimpan. Klik tombol + Tambah Produk di atas.</div>` : `
+          <div style="overflow-x:auto;"><table>
+            <thead><tr><th>Nama Produk</th><th>Ukuran/Varian</th><th>Modal</th><th>Harga Jual</th><th>Stok</th><th>Aksi</th></tr></thead>
             <tbody>
-              ${recent.map(t => `
+              ${state.products.map(p=>`
                 <tr>
-                  <td>${fmtDate(t.date)}</td>
-                  <td><span class="pill ${t.type}">${escapeHtml(t.category)}</span></td>
-                  <td>${escapeHtml(t.note||'—')}</td>
-                  <td style="text-align:right;" class="amt ${t.type} num">${t.type==='expense'?'-':'+'}${rupiah(t.amount)}</td>
+                  <td><b>${p.name}</b></td>
+                  <td>${p.size||'-'} / ${p.color||'-'}</td>
+                  <td class="num">${rupiah(p.buyPrice)}</td>
+                  <td class="num">${rupiah(p.sellPrice)}</td>
+                  <td class="num"><b>${p.stock} pcs</b></td>
+                  <td><button class="btn danger-ghost sm" data-del-p="${p.id}">Hapus</button></td>
                 </tr>`).join('')}
             </tbody>
-          </table></div>` : emptyState('Belum ada transaksi', 'Catatan pemasukan & pengeluaran akan muncul di sini.')}
-        </div>
-
-        <div>
-          <div class="panel">
-            <h3>Stok menipis ${low.length ? `<span class="pill low">${low.length} produk</span>`:''}</h3>
-            ${low.length ? low.slice(0,5).map(p => `
-              <div style="padding:7px 0;border-bottom:1px solid var(--line);font-size:13px;">
-                <div style="display:flex;justify-content:space-between;">
-                  <span>${escapeHtml(p.name)} ${p.size?`· ${escapeHtml(p.size)}`:''}</span>
-                  <span class="num">${p.stock} pcs</span>
-                </div>
-              </div>`).join('') : `<div style="font-size:13px;color:var(--ink-soft);padding:8px 0;">Semua stok aman.</div>`}
-          </div>
-          <div class="panel">
-            <h3>Produk terlaris</h3>
-            ${best.length ? best.map(b => `
-              <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px;">
-                <span>${escapeHtml(b.product.name)}</span><span class="num">${b.qty} terjual</span>
-              </div>`).join('') : `<div style="font-size:13px;color:var(--ink-soft);padding:8px 0;">Belum ada penjualan tercatat.</div>`}
-          </div>
-        </div>
-      </div>
-    `;
-  }
-
-  function emptyState(title, sub){
-    return `<div class="empty"><div class="headline">${title}</div><div>${sub}</div></div>`;
-  }
-
-  function renderTransaksi(){
-    const sorted = [...state.transactions].sort((a,b)=> b.date.localeCompare(a.date) || b.id.localeCompare(a.id));
-    return `
-      <div class="panel">
-        <h3>Riwayat transaksi kas <button class="btn primary sm" id="btnAddTrans">+ Transaksi</button></h3>
-        <div class="filters">
-          <select id="fType">
-            <option value="all">Semua jenis</option>
-            <option value="income">Pemasukan</option>
-            <option value="expense">Pengeluaran</option>
-          </select>
-          <select id="fMonth">
-            <option value="all">Semua bulan</option>
-            ${[...new Set(state.transactions.map(t=>monthKey(t.date)))].sort().reverse().map(mk=>`<option value="${mk}">${mk}</option>`).join('')}
-          </select>
-        </div>
-        <div id="transTableWrap">${transTable(sorted)}</div>
-      </div>
-    `;
-  }
-
-  function transTable(list){
-    if (!list.length) return emptyState('Belum ada transaksi', 'Klik "+ Transaksi" untuk mulai mencatat kas masuk & keluar.');
-    return `<div class="scroll-x"><table>
-      <thead><tr><th>Tanggal</th><th>Jenis</th><th>Kategori</th><th>Catatan</th><th style="text-align:right;">Jumlah</th><th></th></tr></thead>
-      <tbody>
-        ${list.map(t => `
-          <tr>
-            <td>${fmtDate(t.date)}</td>
-            <td><span class="pill ${t.type}">${t.type==='income'?'Masuk':'Keluar'}</span></td>
-            <td>${escapeHtml(t.category)}</td>
-            <td>${escapeHtml(t.note||'—')}</td>
-            <td style="text-align:right;" class="amt ${t.type} num">${t.type==='expense'?'-':'+'}${rupiah(t.amount)}</td>
-            <td><button class="btn danger-ghost" data-del-trans="${t.id}">Hapus</button></td>
-          </tr>`).join('')}
-      </tbody>
-    </table></div>`;
-  }
-
-  function renderStok(){
-    const list = [...state.products].sort((a,b)=>a.name.localeCompare(b.name));
-    return `
-      <div class="panel">
-        <h3>Daftar produk <button class="btn primary sm" id="btnAddProduk">+ Produk</button></h3>
-        ${!list.length ? emptyState('Belum ada produk', 'Tambahkan produk baju bayi untuk mulai melacak stok & modal.') : `
-        <div class="scroll-x"><table>
-          <thead><tr><th>Produk</th><th>Ukuran / Varian</th><th style="text-align:right;">Modal</th><th style="text-align:right;">Harga Jual</th><th>Stok</th><th></th></tr></thead>
-          <tbody>
-            ${list.map(p => {
-              const min = Number(p.minStock ?? 3);
-              const stock = Number(p.stock);
-              const ratio = min>0 ? Math.min(100, (stock/(min*3))*100) : 100;
-              const cls = stock<=0 ? 'out' : (stock<=min ? 'low' : '');
-              return `
-              <tr>
-                <td>${escapeHtml(p.name)}</td>
-                <td>${[p.size,p.color].filter(Boolean).map(escapeHtml).join(' · ')||'—'}</td>
-                <td style="text-align:right;" class="num">${rupiah(p.buyPrice)}</td>
-                <td style="text-align:right;" class="num">${rupiah(p.sellPrice)}</td>
-                <td style="min-width:110px;">
-                  <div style="display:flex;justify-content:space-between;"><span class="num">${stock} pcs</span>${stock<=min?`<span class="pill low">menipis</span>`:''}</div>
-                  <div class="stock-bar-bg"><div class="stock-bar-fill ${cls}" style="width:${ratio}%"></div></div>
-                </td>
-                <td>
-                  <button class="btn sm" data-edit-produk="${p.id}">Ubah</button>
-                  <button class="btn danger-ghost" data-del-produk="${p.id}">Hapus</button>
-                </td>
-              </tr>`;
-            }).join('')}
-          </tbody>
-        </table></div>`}
-      </div>
-    `;
-  }
-
-  function renderPenjualanTab(){
-    const sales = [...state.transactions].filter(t=>t.productId).sort((a,b)=> b.date.localeCompare(a.date) || b.id.localeCompare(a.id));
-    const hasProducts = state.products.length > 0;
-    return `
-      <div class="panel">
-        <h3>Penjualan <button class="btn primary sm" id="btnAddJual" ${hasProducts?'':'disabled'}>+ Catat Penjualan</button></h3>
-        ${!hasProducts ? emptyState('Tambahkan produk dulu', 'Buka tab Stok Produk untuk menambahkan produk sebelum mencatat penjualan.') :
-          (!sales.length ? emptyState('Belum ada penjualan', 'Setiap penjualan otomatis mengurangi stok dan menambah pemasukan.') : `
-          <div class="scroll-x"><table>
-            <thead><tr><th>Tanggal</th><th>Produk</th><th>Qty</th><th style="text-align:right;">Total</th><th style="text-align:right;">Estimasi Laba</th></tr></thead>
+          </table></div>`}
+        </div>`;
+    } else if (currentTab === 'transaksi') {
+      c.innerHTML = `
+        <div class="panel">
+          <h3>Transaksi Kas <button class="btn primary sm" id="btnAddTrans">+ Transaksi</button></h3>
+          ${!state.transactions.length ? `<div class="empty">Belum ada transaksi kas. Klik tombol + Transaksi di atas.</div>` : `
+          <div style="overflow-x:auto;"><table>
+            <thead><tr><th>Tanggal</th><th>Jenis</th><th>Kategori</th><th>Catatan</th><th>Jumlah</th><th>Aksi</th></tr></thead>
             <tbody>
-              ${sales.map(t => {
-                const p = state.products.find(pp=>pp.id===t.productId);
-                const cost = p ? Number(p.buyPrice)*Number(t.qty||0) : 0;
-                const profit = Number(t.amount) - cost - Number(t.shipCost||0);
-                return `<tr>
-                  <td>${fmtDate(t.date)}</td>
-                  <td>${escapeHtml(p ? p.name : '(produk dihapus)')}</td>
-                  <td class="num">${t.qty}</td>
-                  <td style="text-align:right;" class="num amt income">${rupiah(t.amount)}</td>
-                  <td style="text-align:right;" class="num ${profit>=0?'amt income':'amt expense'}">${rupiah(profit)}</td>
-                </tr>`;
-              }).join('')}
+              ${state.transactions.map(t=>`
+                <tr>
+                  <td>${t.date}</td>
+                  <td><span class="pill ${t.type}">${t.type==='income'?'Masuk':'Keluar'}</span></td>
+                  <td>${t.category}</td>
+                  <td>${t.note||'-'}</td>
+                  <td class="num amt ${t.type}">${t.type==='expense'?'-':'+'}${rupiah(t.amount)}</td>
+                  <td><button class="btn danger-ghost sm" data-del-t="${t.id}">Hapus</button></td>
+                </tr>`).join('')}
             </tbody>
-          </table></div>`)}
-      </div>
-    `;
-  }
-
-  function renderLaporan(){
-    const months = last6Months();
-    const data = months.map(m => {
-      const list = state.transactions.filter(t => monthKey(t.date) === m.key);
-      return { ...m, income: sumBy(list,'income'), expense: sumBy(list,'expense') };
-    });
-    const maxVal = Math.max(1, ...data.map(d=>Math.max(d.income,d.expense)));
-    const totalIncome = sumBy(state.transactions,'income');
-    const totalExpense = sumBy(state.transactions,'expense');
-    const margin = totalIncome>0 ? ((totalIncome-totalExpense)/totalIncome*100) : 0;
-    const best = bestSellers(6);
-    const stockValue = state.products.reduce((a,p)=>a + Number(p.buyPrice)*Number(p.stock), 0);
-
-    return `
-      <div class="panel">
-        <h3>Pemasukan vs Pengeluaran — 6 bulan terakhir</h3>
-        <div class="legend">
-          <span><i style="background:var(--teal)"></i>Pemasukan</span>
-          <span><i style="background:var(--rose)"></i>Pengeluaran</span>
-        </div>
-        <div class="bars">
-          ${data.map(d => `
-            <div class="bar-col">
-              <div class="bar-wrap">
-                <div class="bar income" style="height:${(d.income/maxVal*100)}%" title="${rupiah(d.income)}"></div>
-                <div class="bar expense" style="height:${(d.expense/maxVal*100)}%" title="${rupiah(d.expense)}"></div>
-              </div>
-              <div class="bar-label">${d.label}</div>
-            </div>`).join('')}
-        </div>
-      </div>
-
-      <div class="grid grid-2" style="margin-top:14px;">
+          </table></div>`}
+        </div>`;
+    } else if (currentTab === 'penjualan') {
+      c.innerHTML = `
         <div class="panel">
-          <h3>Ringkasan keseluruhan</h3>
-          <div style="font-size:13.5px;line-height:2.1;">
-            <div style="display:flex;justify-content:space-between;"><span style="color:var(--ink-soft);">Total pemasukan</span><span class="num amt income">${rupiah(totalIncome)}</span></div>
-            <div style="display:flex;justify-content:space-between;"><span style="color:var(--ink-soft);">Total pengeluaran</span><span class="num amt expense">${rupiah(totalExpense)}</span></div>
-            <div style="display:flex;justify-content:space-between;"><span style="color:var(--ink-soft);">Laba bersih</span><span class="num" style="font-weight:700;">${rupiah(totalIncome-totalExpense)}</span></div>
-            <div style="display:flex;justify-content:space-between;"><span style="color:var(--ink-soft);">Margin laba</span><span class="num">${margin.toFixed(1)}%</span></div>
-            <div style="display:flex;justify-content:space-between;"><span style="color:var(--ink-soft);">Nilai modal stok saat ini</span><span class="num">${rupiah(stockValue)}</span></div>
+          <h3>Catat Penjualan <button class="btn primary sm" id="btnAddJual" ${state.products.length?'':'disabled'}>+ Catat Penjualan</button></h3>
+          ${!state.products.length ? `<div class="empty">Tambahkan produk di menu Stok Produk terlebih dahulu sebelum mencatat penjualan.</div>` : ''}
+        </div>`;
+    } else if (currentTab === 'omset') {
+      c.innerHTML = `
+        <div class="panel">
+          <h3>Kalkulator Pembagian Omset</h3>
+          <label>Total Omset (Rp)</label>
+          <input type="number" id="omsetInput" value="1000000">
+          <div class="row3" style="margin-top:10px;">
+            <div><label>Modal Putar (%)</label><input type="number" id="pModal" value="33.33"></div>
+            <div><label>Keuntungan (%)</label><input type="number" id="pUntung" value="33.33"></div>
+            <div><label>Operasional (%)</label><input type="number" id="pOps" value="33.34"></div>
           </div>
         </div>
-        <div class="panel">
-          <h3>Produk terlaris</h3>
-          ${best.length ? best.map((b,i) => `
-            <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px;">
-              <span>${i+1}. ${escapeHtml(b.product.name)}</span><span class="num">${b.qty} pcs</span>
-            </div>`).join('') : `<div style="font-size:13px;color:var(--ink-soft);">Belum ada data penjualan.</div>`}
-        </div>
-      </div>
-    `;
+        <div class="grid grid-3" style="margin-top:14px;">
+          <div class="tag-card"><div class="label">Modal Putar</div><div class="value mustard" id="vModal">Rp 0</div></div>
+          <div class="tag-card"><div class="label">Keuntungan</div><div class="value pos" id="vUntung">Rp 0</div></div>
+          <div class="tag-card"><div class="label">Operasional</div><div class="value neg" id="vOps">Rp 0</div></div>
+        </div>`;
+      const calc = () => {
+        const tot = Number(document.getElementById('omsetInput').value)||0;
+        document.getElementById('vModal').textContent = rupiah(tot * (Number(document.getElementById('pModal').value)||0)/100);
+        document.getElementById('vUntung').textContent = rupiah(tot * (Number(document.getElementById('pUntung').value)||0)/100);
+        document.getElementById('vOps').textContent = rupiah(tot * (Number(document.getElementById('pOps').value)||0)/100);
+      };
+      ['omsetInput','pModal','pUntung','pOps'].forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.addEventListener('input', calc);
+      });
+      calc();
+    }
+    attachEvents();
   }
 
-  // ---------- Modal logic ----------
-  const ovTrans = document.getElementById('ovTrans');
-  const ovProduk = document.getElementById('ovProduk');
-  const ovJual = document.getElementById('ovJual');
-  let editTransId = null;
+  function attachEvents(){
+    const btnP = document.getElementById('btnAddProduk');
+    if(btnP) btnP.onclick = () => {
+      document.getElementById('pName').value = '';
+      document.getElementById('pSize').value = '';
+      document.getElementById('pColor').value = '';
+      document.getElementById('pBuy').value = '';
+      document.getElementById('pSell').value = '';
+      document.getElementById('pStock').value = '';
+      document.getElementById('ovProduk').classList.add('show');
+    };
+    
+    const btnT = document.getElementById('btnAddTrans');
+    if(btnT) btnT.onclick = () => {
+      document.getElementById('tCategory').innerHTML = EXPENSE_CATS.map(c=>`<option value="${c}">${c}</option>`).join('');
+      document.getElementById('tDate').value = todayStr();
+      document.getElementById('tAmount').value = '';
+      document.getElementById('tNote').value = '';
+      document.getElementById('ovTrans').classList.add('show');
+    };
 
-  function openModal(el){ el.classList.add('show'); }
-  function closeModal(el){ el.classList.remove('show'); }
+    const btnJ = document.getElementById('btnAddJual');
+    if(btnJ) btnJ.onclick = () => {
+      document.getElementById('jProduct').innerHTML = state.products.map(p=>`<option value="${p.id}">${p.name} (Stok: ${p.stock})</option>`).join('');
+      document.getElementById('jDate').value = todayStr();
+      document.getElementById('ovJual').classList.add('show');
+    };
 
-  function populateCategorySelect(type){
-    const sel = document.getElementById('tCategory');
-    const cats = type === 'income' ? INCOME_CATS : EXPENSE_CATS;
-    sel.innerHTML = cats.map(c=>`<option value="${c}">${c}</option>`).join('');
+    document.querySelectorAll('[data-del-p]').forEach(el => el.onclick = () => {
+      state.products = state.products.filter(p=>p.id!==el.dataset.delP); save(); render();
+    });
+    document.querySelectorAll('[data-del-t]').forEach(el => el.onclick = () => {
+      state.transactions = state.transactions.filter(t=>t.id!==el.dataset.delT); save(); render();
+    });
   }
 
-  document.getElementById('transTypeSeg').addEventListener('click', (e)=>{
-    const btn = e.target.closest('button[data-type]');
-    if (!btn) return;
-    document.querySelectorAll('#transTypeSeg button').forEach(b=>b.classList.remove('on'));
-    btn.classList.add('on', btn.dataset.type);
-    populateCategorySelect(btn.dataset.type);
-  });
-
-  function openAddTrans(){
-    editTransId = null;
-    document.getElementById('transModalTitle').textContent = 'Tambah Transaksi';
-    document.querySelectorAll('#transTypeSeg button').forEach(b=>b.classList.remove('on'));
-    const incomeBtn = document.querySelector('#transTypeSeg button[data-type="income"]');
-    incomeBtn.classList.add('on','income');
-    populateCategorySelect('income');
-    document.getElementById('tAmount').value = '';
-    document.getElementById('tDate').value = todayStr();
-    document.getElementById('tNote').value = '';
-    openModal(ovTrans);
-  }
-
-  document.getElementById('saveTrans').addEventListener('click', ()=>{
-    const typeBtn = document.querySelector('#transTypeSeg button.on');
-    const type = typeBtn.dataset.type;
-    const category = document.getElementById('tCategory').value;
-    const amount = Number(document.getElementById('tAmount').value);
-    const date = document.getElementById('tDate').value || todayStr();
-    const note = document.getElementById('tNote').value.trim();
-    if (!amount || amount <= 0) { document.getElementById('tAmount').focus(); return; }
-    state.transactions.push({ id: uid(), type, category, amount, date, note });
-    save();
-    closeModal(ovTrans);
-    render();
-  });
-
-  // Produk modal
-  function openAddProduk(){
-    document.getElementById('produkModalTitle').textContent = 'Tambah Produk';
-    document.getElementById('pId').value = '';
-    ['pName','pSize','pColor','pBuy','pSell','pStock'].forEach(id=>document.getElementById(id).value='');
-    document.getElementById('pMin').value = 3;
-    openModal(ovProduk);
-  }
-  function openEditProduk(id){
-    const p = state.products.find(x=>x.id===id);
-    if (!p) return;
-    document.getElementById('produkModalTitle').textContent = 'Ubah Produk';
-    document.getElementById('pId').value = p.id;
-    document.getElementById('pName').value = p.name;
-    document.getElementById('pSize').value = p.size||'';
-    document.getElementById('pColor').value = p.color||'';
-    document.getElementById('pBuy').value = p.buyPrice;
-    document.getElementById('pSell').value = p.sellPrice;
-    document.getElementById('pStock').value = p.stock;
-    document.getElementById('pMin').value = p.minStock ?? 3;
-    openModal(ovProduk);
-  }
-  document.getElementById('saveProduk').addEventListener('click', ()=>{
-    const id = document.getElementById('pId').value;
+  // Modals Save Handlers
+  document.getElementById('saveProduk').onclick = () => {
     const name = document.getElementById('pName').value.trim();
-    if (!name) { document.getElementById('pName').focus(); return; }
-    const payload = {
-      name,
-      size: document.getElementById('pSize').value.trim(),
-      color: document.getElementById('pColor').value.trim(),
+    if(!name) { alert('Nama produk wajib diisi'); return; }
+    state.products.push({
+      id: uid(), name, size: document.getElementById('pSize').value,
+      color: document.getElementById('pColor').value,
       buyPrice: Number(document.getElementById('pBuy').value)||0,
       sellPrice: Number(document.getElementById('pSell').value)||0,
-      stock: Number(document.getElementById('pStock').value)||0,
-      minStock: Number(document.getElementById('pMin').value)||0,
-    };
-    if (id) {
-      const p = state.products.find(x=>x.id===id);
-      Object.assign(p, payload);
-    } else {
-      state.products.push({ id: uid(), ...payload });
-    }
-    save();
-    closeModal(ovProduk);
-    render();
-  });
+      stock: Number(document.getElementById('pStock').value)||0
+    });
+    save(); document.getElementById('ovProduk').classList.remove('show'); render();
+  };
 
-  // Penjualan modal
-  function openAddJual(){
-    const sel = document.getElementById('jProduct');
-    sel.innerHTML = state.products.map(p=>`<option value="${p.id}" ${p.stock<=0?'disabled':''}>${escapeHtml(p.name)}${p.size?' · '+escapeHtml(p.size):''} (stok: ${p.stock})</option>`).join('');
-    document.getElementById('jQty').value = 1;
-    document.getElementById('jDate').value = todayStr();
-    document.getElementById('jShip').value = '';
-    document.getElementById('jNote').value = '';
-    updateJualPrice();
-    openModal(ovJual);
-  }
-  function updateJualPrice(){
-    const pid = document.getElementById('jProduct').value;
-    const p = state.products.find(x=>x.id===pid);
-    document.getElementById('jPrice').value = p ? p.sellPrice : '';
-    updateJualPreview();
-  }
-  function updateJualPreview(){
-    const pid = document.getElementById('jProduct').value;
-    const p = state.products.find(x=>x.id===pid);
-    const qty = Number(document.getElementById('jQty').value)||0;
-    const price = Number(document.getElementById('jPrice').value)||0;
-    const ship = Number(document.getElementById('jShip').value)||0;
-    const total = qty*price;
-    const cost = p ? Number(p.buyPrice)*qty : 0;
-    const profit = total - cost - ship;
-    document.getElementById('jPreview').textContent = p
-      ? `Total penjualan ${rupiah(total)} · Estimasi laba ${rupiah(profit)} · Sisa stok setelah transaksi: ${Math.max(0, p.stock-qty)} pcs`
-      : '';
-  }
-  document.getElementById('jProduct').addEventListener('change', updateJualPrice);
-  document.getElementById('jQty').addEventListener('input', updateJualPreview);
-  document.getElementById('jPrice').addEventListener('input', updateJualPreview);
-  document.getElementById('jShip').addEventListener('input', updateJualPreview);
-
-  document.getElementById('saveJual').addEventListener('click', ()=>{
-    const pid = document.getElementById('jProduct').value;
-    const p = state.products.find(x=>x.id===pid);
-    const qty = Number(document.getElementById('jQty').value);
-    const price = Number(document.getElementById('jPrice').value);
-    const ship = Number(document.getElementById('jShip').value)||0;
-    const date = document.getElementById('jDate').value || todayStr();
-    const note = document.getElementById('jNote').value.trim();
-    if (!p || !qty || qty<=0 || !price) return;
-    if (qty > p.stock) { alert('Jumlah terjual melebihi stok yang tersedia (' + p.stock + ' pcs).'); return; }
-    p.stock = p.stock - qty;
+  document.getElementById('saveTrans').onclick = () => {
+    const amount = Number(document.getElementById('tAmount').value);
+    if(!amount) { alert('Jumlah transaksi wajib diisi'); return; }
+    const typeBtn = document.querySelector('#transTypeSeg button.on');
     state.transactions.push({
-      id: uid(), type: 'income', category: 'Penjualan Produk',
-      amount: qty*price, date, note, productId: p.id, qty, shipCost: ship
+      id: uid(), type: typeBtn.dataset.type, category: document.getElementById('tCategory').value,
+      amount, date: document.getElementById('tDate').value || todayStr(), note: document.getElementById('tNote').value
     });
-    save();
-    closeModal(ovJual);
-    render();
-  });
+    save(); document.getElementById('ovTrans').classList.remove('show'); render();
+  };
 
-  // Close handlers
-  document.querySelectorAll('[data-close]').forEach(el=>{
-    el.addEventListener('click', (e)=>{
-      closeModal(e.target.closest('.overlay'));
-    });
-  });
-  document.querySelectorAll('.overlay').forEach(ov=>{
-    if (ov.id === 'lockScreen') return; // lock screen must not be dismissible by outside click
-    ov.addEventListener('click', (e)=>{ if (e.target === ov) closeModal(ov); });
-  });
+  document.querySelectorAll('[data-close]').forEach(el => el.onclick = () => el.closest('.overlay').classList.remove('show'));
+  document.querySelectorAll('.nav-item').forEach(el => el.onclick = () => { currentTab = el.dataset.tab; render(); });
 
-  function attachDynamicHandlers(){
-    const btnAddTrans = document.getElementById('btnAddTrans');
-    if (btnAddTrans) btnAddTrans.addEventListener('click', openAddTrans);
-    const btnAddProduk = document.getElementById('btnAddProduk');
-    if (btnAddProduk) btnAddProduk.addEventListener('click', openAddProduk);
-    const btnAddJual = document.getElementById('btnAddJual');
-    if (btnAddJual) btnAddJual.addEventListener('click', openAddJual);
+  document.getElementById('btnBackup').onclick = () => document.getElementById('ovBackup').classList.add('show');
+  document.getElementById('btnSaveScriptUrl').onclick = () => {
+    localStorage.setItem('gdrive_webhook_url', document.getElementById('gdriveScriptUrl').value.trim());
+    syncToGoogleDrive(); alert('URL Webhook disimpan!');
+  };
 
-    document.querySelectorAll('[data-del-trans]').forEach(el=>{
-      el.addEventListener('click', ()=>{
-        if (!confirm('Hapus transaksi ini?')) return;
-        state.transactions = state.transactions.filter(t=>t.id!==el.dataset.delTrans);
-        save(); render();
-      });
-    });
-    document.querySelectorAll('[data-edit-produk]').forEach(el=>{
-      el.addEventListener('click', ()=> openEditProduk(el.dataset.editProduk));
-    });
-    document.querySelectorAll('[data-del-produk]').forEach(el=>{
-      el.addEventListener('click', ()=>{
-        if (!confirm('Hapus produk ini? Riwayat penjualan yang sudah ada tidak akan terhapus.')) return;
-        state.products = state.products.filter(p=>p.id!==el.dataset.delProduk);
-        save(); render();
-      });
-    });
+  document.getElementById('btnLogoModal').onclick = () => document.getElementById('ovLogo').classList.add('show');
+  document.getElementById('btnChooseLogo').onclick = () => document.getElementById('logoFileInput').click();
+  document.getElementById('logoFileInput').onchange = (e) => {
+    const f = e.target.files[0];
+    if(f){ const r = new FileReader(); r.onload = (evt) => { state.logo = evt.target.result; save(); }; r.readAsDataURL(f); }
+  };
+  document.getElementById('btnRemoveLogo').onclick = () => { state.logo = ''; save(); };
 
-    const fType = document.getElementById('fType');
-    const fMonth = document.getElementById('fMonth');
-    if (fType && fMonth) {
-      const applyFilter = ()=>{
-        let list = [...state.transactions];
-        if (fType.value !== 'all') list = list.filter(t=>t.type===fType.value);
-        if (fMonth.value !== 'all') list = list.filter(t=>monthKey(t.date)===fMonth.value);
-        list.sort((a,b)=> b.date.localeCompare(a.date) || b.id.localeCompare(a.id));
-        document.getElementById('transTableWrap').innerHTML = transTable(list);
-        document.querySelectorAll('[data-del-trans]').forEach(el=>{
-          el.addEventListener('click', ()=>{
-            if (!confirm('Hapus transaksi ini?')) return;
-            state.transactions = state.transactions.filter(t=>t.id!==el.dataset.delTrans);
-            save(); render();
-          });
-        });
-      };
-      fType.addEventListener('change', applyFilter);
-      fMonth.addEventListener('change', applyFilter);
-    }
-  }
-
-  // ---------- Nav ----------
-  document.querySelectorAll('.nav-item').forEach(el=>{
-    el.addEventListener('click', ()=>{
-      currentTab = el.dataset.tab;
-      document.getElementById('rail').classList.remove('open');
-      document.getElementById('scrim').classList.remove('show');
+  document.getElementById('btnResetData').onclick = () => {
+    if(confirm('Apakah Anda yakin ingin meriset seluruh data lokal yang tersimpan?')) {
+      localStorage.removeItem(STORAGE_KEY);
+      state = { products: [], transactions: [], logo: '' };
       render();
-    });
-  });
-  document.getElementById('menuBtn').addEventListener('click', ()=>{
-    document.getElementById('rail').classList.toggle('open');
-    document.getElementById('scrim').classList.toggle('show');
-  });
-  document.getElementById('scrim').addEventListener('click', ()=>{
-    document.getElementById('rail').classList.remove('open');
-    document.getElementById('scrim').classList.remove('show');
-  });
+      alert('Data lokal berhasil diriset.');
+    }
+  };
 
-  initSync();
+  loadLocal(); render(); syncToGoogleDrive();
 })();
 </script>
 </body>
