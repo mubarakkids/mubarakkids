@@ -13,16 +13,16 @@
     --surface: #FFFFFF;
     --surface-2: #F7F5EF;
     --ink: #22302B;
-    --ink-soft: #5B6960;
-    --stitch: #C7C0AE;
+    --ink-soft: #48564C;
+    --stitch: #93876C;
     --rose: #D9838C;
     --rose-ink: #7A2E36;
     --teal: #2E6B60;
     --teal-ink: #163832;
     --mustard: #DB9F35;
     --mustard-ink: #6B4B0F;
-    --danger: #B3492F;
-    --line: #DEDACB;
+    --danger: #9A3A22;
+    --line: #C9C0A6;
     --radius: 4px;
     --shadow: 0 1px 0 rgba(34,48,43,0.06);
     box-sizing: border-box;
@@ -33,14 +33,14 @@
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
       --bg: #1B211D; --surface: #232B25; --surface-2: #1F2621;
-      --ink: #ECEBE3; --ink-soft: #A9B2A8; --stitch: #3B453D;
-      --line: #34403A; --shadow: 0 1px 0 rgba(0,0,0,0.3);
+      --ink: #ECEBE3; --ink-soft: #BFC7BB; --stitch: #5C6A5F;
+      --line: #445248; --shadow: 0 1px 0 rgba(0,0,0,0.3);
     }
   }
   :root[data-theme="dark"] {
     --bg: #1B211D; --surface: #232B25; --surface-2: #1F2621;
-    --ink: #ECEBE3; --ink-soft: #A9B2A8; --stitch: #3B453D;
-    --line: #34403A; --shadow: 0 1px 0 rgba(0,0,0,0.3);
+    --ink: #ECEBE3; --ink-soft: #BFC7BB; --stitch: #5C6A5F;
+    --line: #445248; --shadow: 0 1px 0 rgba(0,0,0,0.3);
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -66,9 +66,10 @@
   .brand-tag {
     width: 30px; height: 30px; border-radius: 6px; background: var(--rose);
     display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-    position: relative;
+    position: relative; overflow: hidden;
   }
-  .brand-tag::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--surface); position: absolute; top: 6px; left: 6px; }
+  .brand-tag img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .brand-tag.default-tag::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--surface); position: absolute; top: 6px; left: 6px; }
   .brand-title { font-size: 15px; line-height: 1.2; }
   .brand-sub { font-size: 11px; color: var(--ink-soft); }
 
@@ -92,6 +93,7 @@
   /* ---- Cards (hang-tag style) ---- */
   .grid { display: grid; gap: 14px; }
   .grid-4 { grid-template-columns: repeat(4, 1fr); }
+  .grid-3 { grid-template-columns: repeat(3, 1fr); }
   .grid-2 { grid-template-columns: 1.3fr 1fr; }
 
   .tag-card {
@@ -108,6 +110,8 @@
   .tag-card .value.pos { color: var(--teal-ink); }
   :root[data-theme="dark"] .tag-card .value.pos { color: var(--teal); }
   .tag-card .value.neg { color: var(--danger); }
+  .tag-card .value.mustard { color: var(--mustard-ink); }
+  :root[data-theme="dark"] .tag-card .value.mustard { color: var(--mustard); }
   .tag-card .sub { font-size: 12px; color: var(--ink-soft); margin-top: 4px; }
 
   .panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; }
@@ -129,14 +133,16 @@
   .btn.sm { padding: 6px 10px; font-size: 12px; }
   .btn:disabled { opacity: .45; cursor: not-allowed; }
 
-  label { display: block; font-size: 12px; color: var(--ink-soft); margin: 10px 0 5px; }
+  label { display: block; font-size: 12px; color: var(--ink-soft); margin: 10px 0 5px; font-weight: 600; }
   label:first-child { margin-top: 0; }
   input, select, textarea {
     width: 100%; font: inherit; font-size: 14px; padding: 9px 10px;
-    border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface-2); color: var(--ink);
+    border: 1px solid var(--stitch); border-radius: var(--radius); background: var(--surface-2); color: var(--ink);
   }
+  input::placeholder, textarea::placeholder { color: var(--ink-soft); opacity: 0.9; }
   input:focus, select:focus, textarea:focus { outline: 2px solid var(--teal); outline-offset: 1px; border-color: var(--teal); }
   .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
   .seg { display: flex; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
   .seg button { flex: 1; padding: 9px; font: inherit; font-size: 13px; font-weight: 600; background: var(--surface-2); border: none; color: var(--ink-soft); cursor: pointer; }
   .seg button.on.income { background: var(--teal); color: #fff; }
@@ -144,7 +150,7 @@
 
   /* ---- Table ---- */
   table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
-  th { text-align: left; font-weight: 600; color: var(--ink-soft); font-size: 11.5px; padding: 0 10px 8px; border-bottom: 1px dashed var(--stitch); }
+  th { text-align: left; font-weight: 700; color: var(--ink-soft); font-size: 11.5px; padding: 0 10px 8px; border-bottom: 1px dashed var(--stitch); }
   td { padding: 10px; border-bottom: 1px solid var(--line); vertical-align: middle; }
   tr:last-child td { border-bottom: none; }
   .pill { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; }
@@ -200,6 +206,7 @@
     .rail.open { transform: translateX(0); }
     .main { padding: 18px 16px 60px; }
     .grid-4 { grid-template-columns: 1fr 1fr; }
+    .grid-3 { grid-template-columns: 1fr; }
     .grid-2 { grid-template-columns: 1fr; }
     .menu-btn { display: inline-flex !important; }
     .rail-scrim { position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 39; display: none; }
@@ -225,7 +232,7 @@
   <div class="rail-scrim" id="scrim"></div>
   <nav class="rail" id="rail">
     <div class="brand">
-      <div class="brand-tag"></div>
+      <div class="brand-tag default-tag" id="mainLogo"></div>
       <div>
         <div class="brand-title headline">Mubarak Kids</div>
         <div class="brand-sub">Manajemen keuangan toko</div>
@@ -233,12 +240,13 @@
     </div>
     <div class="nav-item" data-tab="dashboard"><span class="nav-dot"></span>Dashboard</div>
     <div class="nav-item" data-tab="penjualan"><span class="nav-dot"></span>Catat Penjualan</div>
+    <div class="nav-item" data-tab="omset"><span class="nav-dot"></span>Bagi Omset</div>
     <div class="nav-item" data-tab="transaksi"><span class="nav-dot"></span>Transaksi Kas</div>
     <div class="nav-item" data-tab="stok"><span class="nav-dot"></span>Stok Produk</div>
     <div class="nav-item" data-tab="laporan"><span class="nav-dot"></span>Laporan</div>
     <div class="rail-foot">
       <div id="syncBadge" style="font-weight:600;margin-bottom:8px;">○ Menyambungkan…</div>
-      <button class="btn sm" id="btnSecurity" style="width:100%;justify-content:center;">🔒 Keamanan</button>
+      <button class="btn sm" id="btnSecurity" style="width:100%;justify-content:center;">🔒 Keamanan &amp; Logo</button>
       <button class="btn sm" id="btnBackup" style="width:100%;justify-content:center;margin-top:6px;">🗄 Backup</button>
       <div style="margin-top:8px;">Data tersimpan otomatis dan bisa diakses dari perangkat lain saat Anda masuk dengan akun yang sama.</div>
     </div>
@@ -330,10 +338,10 @@
   </div>
 </div>
 
-<!-- Modal: Keamanan / PIN -->
+<!-- Modal: Keamanan & Edit Logo -->
 <div class="overlay" id="ovSecurity">
   <div class="modal">
-    <div class="modal-head"><h3>Kunci PIN</h3><button class="x" data-close>&times;</button></div>
+    <div class="modal-head"><h3>Pengaturan &amp; Keamanan</h3><button class="x" data-close>&times;</button></div>
     <div id="securityBody"></div>
   </div>
 </div>
@@ -341,7 +349,7 @@
 <!-- Lock screen -->
 <div class="overlay" id="lockScreen" style="background:var(--bg);align-items:center;z-index:100;">
   <div class="modal" style="max-width:340px;text-align:center;">
-    <div class="brand-tag" style="margin:0 auto 14px;width:36px;height:36px;"></div>
+    <div class="brand-tag default-tag" id="lockLogo" style="margin:0 auto 14px;width:36px;height:36px;"></div>
     <h3 class="headline" style="font-size:19px;margin-bottom:4px;">Mubarak Kids</h3>
     <div style="font-size:13px;color:var(--ink-soft);margin-bottom:18px;">Masukkan PIN untuk membuka</div>
     <form id="lockForm">
@@ -368,7 +376,7 @@
   const EXPENSE_CATS = ["Belanja Stok Baju", "Ongkos Kirim", "Kemasan & Packing", "Marketing / Iklan", "Sewa & Operasional Toko", "Gaji / Bantuan Pegawai", "Lainnya"];
   const INCOME_CATS = ["Penjualan Produk", "Pemasukan Lain"];
 
-  let state = { products: [], transactions: [], security: { enabled: false, salt: '', hash: '' } };
+  let state = { products: [], transactions: [], security: { enabled: false, salt: '', hash: '' }, logo: '' };
   let dbCap = null;
   let stateDocRef = null;
   let dbWriteChain = Promise.resolve();
@@ -380,21 +388,51 @@
       if (raw) state = JSON.parse(raw);
     } catch(e){ console.error("Load error", e); }
     if (!state.security) state.security = { enabled: false, salt: '', hash: '' };
+    if (!state.logo) state.logo = '';
+    updateLogoDisplay();
   }
   function saveLocal(){
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
     catch(e){ console.error("Save error", e); }
   }
   function save(){
-    // Always keep a local copy as offline cache.
     saveLocal();
+    updateLogoDisplay();
+    syncToGoogleDrive();
     if (dbCap && stateDocRef) {
       dbWriteChain = dbWriteChain.then(()=>
-        stateDocRef.set({ products: state.products, transactions: state.transactions, security: state.security, updatedAt: new Date().toISOString() })
+        stateDocRef.set({ products: state.products, transactions: state.transactions, security: state.security, logo: state.logo, updatedAt: new Date().toISOString() })
       ).catch(e=>{ console.error('Sinkronisasi gagal', e); syncStatus = 'offline'; updateSyncBadge(); });
       maybeAutoBackup();
     }
   }
+
+  function updateLogoDisplay(){
+    const mainLogo = document.getElementById('mainLogo');
+    const lockLogo = document.getElementById('lockLogo');
+    [mainLogo, lockLogo].forEach(el => {
+      if (!el) return;
+      if (state.logo) {
+        el.classList.remove('default-tag');
+        el.innerHTML = `<img src="${state.logo}" alt="Logo">`;
+      } else {
+        el.classList.add('default-tag');
+        el.innerHTML = '';
+      }
+    });
+  }
+
+  function syncToGoogleDrive(){
+    const url = localStorage.getItem('gdrive_webhook_url');
+    if (!url) return;
+    fetch(url, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(state)
+    }).catch(err => console.error('Gagal webhook Google Drive', err));
+  }
+
   async function initSync(){
     try {
       dbCap = (window.claude && window.claude.use) ? await window.claude.use('db') : null;
@@ -412,14 +450,14 @@
       (snap) => {
         if (snap.exists) {
           const d = snap.data();
-          state = { products: d.products || [], transactions: d.transactions || [], security: d.security || { enabled: false, salt: '', hash: '' } };
+          state = { products: d.products || [], transactions: d.transactions || [], security: d.security || { enabled: false, salt: '', hash: '' }, logo: d.logo || '' };
         } else if (syncStatus === 'connecting') {
-          // First time this artifact syncs: seed cloud with any local data found.
           loadLocal();
-          if (state.products.length || state.transactions.length) save();
+          if (state.products.length || state.transactions.length || state.logo) save();
         }
         syncStatus = 'synced';
         updateSyncBadge();
+        updateLogoDisplay();
         maybeGate();
       },
       (err) => {
@@ -427,6 +465,7 @@
         loadLocal();
         syncStatus = 'offline';
         updateSyncBadge();
+        updateLogoDisplay();
         maybeGate();
       }
     );
@@ -445,7 +484,7 @@
     el.setAttribute('style', style);
   }
 
-  // ---------- PIN lock (device-level convenience lock, not account security) ----------
+  // ---------- PIN lock ----------
   const UNLOCK_KEY = 'kbb_unlocked';
   async function sha256Hex(str){
     const enc = new TextEncoder().encode(str);
@@ -498,24 +537,25 @@
   });
 
   // ---------- Automatic cloud backups ----------
-  const BACKUP_RETAIN = 30; // keep last N daily snapshots
+  const BACKUP_RETAIN = 30;
   let lastBackupWriteAt = 0;
   function maybeAutoBackup(){
     if (!dbCap) return;
     const now = Date.now();
-    if (now - lastBackupWriteAt < 60000) return; // throttle: at most once per minute
+    if (now - lastBackupWriteAt < 60000) return;
     lastBackupWriteAt = now;
     const day = todayStr();
     dbCap.collection('backups').doc(day).set({
       products: state.products,
       transactions: state.transactions,
+      logo: state.logo,
       savedAt: new Date().toISOString(),
     }).then(pruneOldBackups).catch(e=>console.error('Backup otomatis gagal', e));
   }
   async function pruneOldBackups(){
     try {
       const snap = await dbCap.collection('backups').limit(200).get();
-      const docs = snap.docs.slice().sort((a,b)=> a.id.localeCompare(b.id)); // oldest first
+      const docs = snap.docs.slice().sort((a,b)=> a.id.localeCompare(b.id));
       if (docs.length > BACKUP_RETAIN) {
         const toDelete = docs.slice(0, docs.length - BACKUP_RETAIN);
         for (const d of toDelete) { await dbCap.collection('backups').doc(d.id).delete(); }
@@ -528,7 +568,7 @@
       const snap = await dbCap.collection('backups').limit(60).get();
       return snap.docs
         .map(d => ({ id: d.id, data: d.data() }))
-        .sort((a,b)=> b.id.localeCompare(a.id)); // newest first
+        .sort((a,b)=> b.id.localeCompare(a.id));
     } catch(e){ console.error('Gagal memuat daftar backup', e); return []; }
   }
   async function restoreBackup(id){
@@ -540,6 +580,7 @@
       const d = doc.data();
       state.products = d.products || [];
       state.transactions = d.transactions || [];
+      state.logo = d.logo || '';
       save();
       closeModal(ovBackup);
       maybeGate();
@@ -549,7 +590,7 @@
   function exportBackupJSON(){
     const payload = {
       app: 'Mubarak Kids', exportedAt: new Date().toISOString(),
-      products: state.products, transactions: state.transactions
+      products: state.products, transactions: state.transactions, logo: state.logo
     };
     downloadJSONFile('backup-mubarak-kids-' + todayStr() + '.json', JSON.stringify(payload, null, 2));
   }
@@ -577,6 +618,7 @@
         if (!confirm('Pulihkan data dari file ini? Data yang sedang tersimpan akan diganti.')) return;
         state.products = parsed.products;
         state.transactions = parsed.transactions;
+        state.logo = parsed.logo || '';
         save();
         closeModal(ovBackup);
         maybeGate();
@@ -592,7 +634,17 @@
     body.innerHTML = `<div style="font-size:13px;color:var(--ink-soft);">Memuat daftar backup…</div>`;
     const cloudOn = !!dbCap;
     const list = cloudOn ? await listBackups() : [];
+    const savedWebhookUrl = localStorage.getItem('gdrive_webhook_url') || '';
     body.innerHTML = `
+      <div style="border-bottom:1px dashed var(--stitch);padding-bottom:14px;margin-bottom:14px;">
+        <h3 style="font-size:14px;margin-bottom:6px;">🔗 Google Drive Sync (Web App URL)</h3>
+        <p style="font-size:12px;color:var(--ink-soft);margin-bottom:8px;">Masukkan URL Google Apps Script untuk otomatisasi backup ke Google Drive secara real-time.</p>
+        <input type="text" id="gdriveScriptUrl" value="${escapeHtml(savedWebhookUrl)}" placeholder="https://script.google.com/macros/s/.../exec">
+        <div style="display:flex;gap:8px;margin-top:8px;">
+          <button class="btn sm primary" id="btnSaveScriptUrl">Simpan URL</button>
+          <button class="btn sm" id="btnTestSync">Tes Sync</button>
+        </div>
+      </div>
       <p style="font-size:13px;color:var(--ink-soft);">
         ${cloudOn
           ? 'Setiap perubahan otomatis disimpan sebagai backup harian di cloud (30 hari terakhir). Anda bisa memulihkan ke salah satu tanggal di bawah.'
@@ -623,6 +675,13 @@
         <div style="font-size:12px;color:var(--ink-soft);margin-top:6px;">Simpan file ini di tempat lain (Google Drive, email, dll) sebagai cadangan tambahan di luar aplikasi.</div>
       </div>
     `;
+    document.getElementById('btnSaveScriptUrl').addEventListener('click', ()=>{
+      const val = document.getElementById('gdriveScriptUrl').value.trim();
+      if (val) { localStorage.setItem('gdrive_webhook_url', val); alert('URL Webhook disimpan!'); }
+      else { localStorage.removeItem('gdrive_webhook_url'); alert('URL Webhook dihapus.'); }
+      syncToGoogleDrive();
+    });
+    document.getElementById('btnTestSync').addEventListener('click', ()=>{ syncToGoogleDrive(); alert('Sinyal sync dikirim.'); });
     document.getElementById('btnExportBackup').addEventListener('click', exportBackupJSON);
     document.getElementById('btnImportBackup').addEventListener('click', ()=> document.getElementById('importFileInput').click());
     document.getElementById('importFileInput').addEventListener('change', (e)=>{
@@ -639,13 +698,32 @@
     openModal(ovBackup);
   });
 
-  // ---------- Security settings modal ----------
+  // ---------- Security & Logo settings modal ----------
   const ovSecurity = document.getElementById('ovSecurity');
   function renderSecurityModal(){
     const sec = state.security || { enabled: false };
     const body = document.getElementById('securityBody');
+    
+    let html = `
+      <div style="border-bottom:1px dashed var(--stitch);padding-bottom:14px;margin-bottom:14px;">
+        <h3 style="font-size:14px;margin-bottom:8px;">Logo Toko</h3>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
+          <div class="brand-tag ${state.logo ? '' : 'default-tag'}" id="previewLogoModal" style="width:44px;height:44px;">
+            ${state.logo ? `<img src="${state.logo}" alt="Logo">` : ''}
+          </div>
+          <div>
+            <input type="file" id="logoFileInput" accept="image/*" style="display:none;">
+            <button class="btn sm" id="btnChooseLogo">Pilih Gambar Logo…</button>
+            ${state.logo ? `<button class="btn danger-ghost sm" id="btnRemoveLogo" style="margin-left:4px;">Hapus Logo</button>` : ''}
+          </div>
+        </div>
+        <div style="font-size:11.5px;color:var(--ink-soft);">File format PNG/JPG. Disarankan rasio 1:1.</div>
+      </div>
+    `;
+
     if (!sec.enabled) {
-      body.innerHTML = `
+      html += `
+        <h3 style="font-size:14px;margin-bottom:8px;">Kunci PIN</h3>
         <p style="font-size:13px;color:var(--ink-soft);margin-bottom:4px;">Buat PIN 4–8 digit. Setiap kali aplikasi dibuka di perangkat ini, PIN akan diminta lebih dulu.</p>
         <label>PIN Baru</label>
         <input type="password" inputmode="numeric" id="secPinNew" maxlength="8" placeholder="••••">
@@ -656,6 +734,47 @@
           <button class="btn" data-close>Batal</button>
           <button class="btn primary" id="secEnableBtn">Aktifkan Kunci PIN</button>
         </div>`;
+    } else {
+      html += `
+        <h3 style="font-size:14px;margin-bottom:8px;">Kunci PIN</h3>
+        <p style="font-size:13px;color:var(--ink-soft);margin-bottom:4px;">Kunci PIN sedang aktif.</p>
+        <label>PIN Saat Ini</label>
+        <input type="password" inputmode="numeric" id="secPinOld" maxlength="8" placeholder="••••">
+        <label>PIN Baru (kosongkan jika hanya ingin mematikan kunci)</label>
+        <input type="password" inputmode="numeric" id="secPinNew2" maxlength="8" placeholder="••••">
+        <div class="sub" id="secError" style="color:var(--danger);margin-top:8px;font-size:12.5px;"></div>
+        <div class="modal-actions">
+          <button class="btn" data-close>Batal</button>
+          <button class="btn danger-ghost" id="secDisableBtn" style="border:1px solid var(--line);">Matikan Kunci</button>
+          <button class="btn primary" id="secChangeBtn">Simpan PIN Baru</button>
+        </div>`;
+    }
+
+    body.innerHTML = html;
+
+    document.getElementById('btnChooseLogo').addEventListener('click', () => document.getElementById('logoFileInput').click());
+    document.getElementById('logoFileInput').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (evt) => {
+          state.logo = evt.target.result;
+          save();
+          renderSecurityModal();
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+    const btnRemove = document.getElementById('btnRemoveLogo');
+    if (btnRemove) {
+      btnRemove.addEventListener('click', () => {
+        state.logo = '';
+        save();
+        renderSecurityModal();
+      });
+    }
+
+    if (!sec.enabled) {
       document.getElementById('secEnableBtn').addEventListener('click', async ()=>{
         const p1 = document.getElementById('secPinNew').value;
         const p2 = document.getElementById('secPinConfirm').value;
@@ -670,18 +789,6 @@
         closeModal(ovSecurity);
       });
     } else {
-      body.innerHTML = `
-        <p style="font-size:13px;color:var(--ink-soft);margin-bottom:4px;">Kunci PIN sedang aktif.</p>
-        <label>PIN Saat Ini</label>
-        <input type="password" inputmode="numeric" id="secPinOld" maxlength="8" placeholder="••••">
-        <label>PIN Baru (kosongkan jika hanya ingin mematikan kunci)</label>
-        <input type="password" inputmode="numeric" id="secPinNew2" maxlength="8" placeholder="••••">
-        <div class="sub" id="secError" style="color:var(--danger);margin-top:8px;font-size:12.5px;"></div>
-        <div class="modal-actions">
-          <button class="btn" data-close>Batal</button>
-          <button class="btn danger-ghost" id="secDisableBtn" style="border:1px solid var(--line);">Matikan Kunci</button>
-          <button class="btn primary" id="secChangeBtn">Simpan PIN Baru</button>
-        </div>`;
       async function verifyOld(){
         const old = document.getElementById('secPinOld').value;
         const h = await sha256Hex(state.security.salt + old);
@@ -708,6 +815,7 @@
       });
     }
   }
+
   document.getElementById('btnSecurity').addEventListener('click', ()=>{
     renderSecurityModal();
     openModal(ovSecurity);
@@ -861,7 +969,7 @@
     document.querySelectorAll('.nav-item').forEach(el => {
       el.classList.toggle('active', el.dataset.tab === currentTab);
     });
-    const titles = { dashboard:"Dashboard", penjualan:"Catat Penjualan", transaksi:"Transaksi Kas", stok:"Stok Produk", laporan:"Laporan" };
+    const titles = { dashboard:"Dashboard", penjualan:"Catat Penjualan", omset:"Bagi Omset", transaksi:"Transaksi Kas", stok:"Stok Produk", laporan:"Laporan" };
     document.getElementById('pageTitle').textContent = titles[currentTab];
     const toolbar = document.getElementById('toolbar');
     const exportMap = { transaksi: exportTransaksiCSV, stok: exportStokCSV, penjualan: exportPenjualanCSV, laporan: exportLaporanCSV };
@@ -876,6 +984,7 @@
     else if (currentTab === 'transaksi') c.innerHTML = renderTransaksi();
     else if (currentTab === 'stok') c.innerHTML = renderStok();
     else if (currentTab === 'penjualan') c.innerHTML = renderPenjualanTab();
+    else if (currentTab === 'omset') c.innerHTML = renderOmsetTab();
     else if (currentTab === 'laporan') c.innerHTML = renderLaporan();
     attachDynamicHandlers();
   }
@@ -933,7 +1042,7 @@
             ${low.length ? low.slice(0,5).map(p => `
               <div style="padding:7px 0;border-bottom:1px solid var(--line);font-size:13px;">
                 <div style="display:flex;justify-content:space-between;">
-                  <span>${escapeHtml(p.name)} ${p.size?`· ${escapeHtml(p.size)}`:''}</span>
+                  <span>${escapeHtml(p.name)}${p.size?`· ${escapeHtml(p.size)}`:''}</span>
                   <span class="num">${p.stock} pcs</span>
                 </div>
               </div>`).join('') : `<div style="font-size:13px;color:var(--ink-soft);padding:8px 0;">Semua stok aman.</div>`}
@@ -1058,6 +1167,91 @@
     `;
   }
 
+  function renderOmsetTab(){
+    const mIncome = sumBy(txThisMonth(), 'income');
+    return `
+      <div class="panel">
+        <h3>Kalkulator Pembagian Omset Usaha</h3>
+        <p style="font-size:13px;color:var(--ink-soft);margin-bottom:14px;">
+          Hitung alokasi omset menjadi 3 bagian utama (Modal Putar, Keuntungan, dan Operasional) untuk menjaga arus kas toko Mubarak Kids.
+        </p>
+
+        <div class="row2">
+          <div>
+            <label>Masukkan Nominal Omset (Rp)</label>
+            <input type="number" id="omsetInput" min="0" value="${mIncome}" placeholder="Nilai omset...">
+            <div style="margin-top:6px;">
+              <button class="btn sm" id="btnUseThisMonth">Gunakan Omset Bulan Ini (${rupiah(mIncome)})</button>
+            </div>
+          </div>
+          <div>
+            <label>Rasio Presets</label>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:2px;">
+              <button class="btn sm" id="presetEqual">Bagi 1/3 Rata (33.3%)</button>
+              <button class="btn sm" id="presetStandard">50% Modal / 30% Untung / 20% Ops</button>
+              <button class="btn sm" id="presetGrowth">60% Modal / 20% Untung / 20% Ops</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="row3" style="margin-top:16px;">
+          <div><label>Persentase Modal Putar (%)</label><input type="number" id="pctModal" value="33.33" step="0.01"></div>
+          <div><label>Persentase Keuntungan (%)</label><input type="number" id="pctUntung" value="33.33" step="0.01"></div>
+          <div><label>Persentase Operasional (%)</label><input type="number" id="pctOps" value="33.34" step="0.01"></div>
+        </div>
+        <div id="pctWarning" style="color:var(--danger);font-size:12px;margin-top:4px;min-height:16px;"></div>
+      </div>
+
+      <div class="grid grid-3" style="margin-top:14px;">
+        <div class="tag-card">
+          <div class="label">📦 Modal Putar / Re-Stok</div>
+          <div class="value mustard num" id="resModal">Rp 0</div>
+          <div class="sub">Belanja stok baju baru</div>
+          <button class="btn sm" id="btnCatatModal" style="margin-top:12px;width:100%;justify-content:center;">+ Catat Pengeluaran Modal</button>
+        </div>
+        <div class="tag-card">
+          <div class="label">💰 Keuntungan / Laba Toko</div>
+          <div class="value pos num" id="resUntung">Rp 0</div>
+          <div class="sub">Gaji pemilik atau tabungan</div>
+          <button class="btn sm" id="btnCatatUntung" style="margin-top:12px;width:100%;justify-content:center;">+ Catat Penarikan Laba</button>
+        </div>
+        <div class="tag-card">
+          <div class="label">🛠 Operasional &amp; Biaya</div>
+          <div class="value neg num" id="resOps">Rp 0</div>
+          <div class="sub">Kemasan, iklan, operasional</div>
+          <button class="btn sm" id="btnCatatOps" style="margin-top:12px;width:100%;justify-content:center;">+ Catat Biaya Operasional</button>
+        </div>
+      </div>
+    `;
+  }
+
+  function calculateOmset(){
+    const inputEl = document.getElementById('omsetInput');
+    if (!inputEl) return;
+    const totalOmset = Number(inputEl.value) || 0;
+    const pModal = Number(document.getElementById('pctModal').value) || 0;
+    const pUntung = Number(document.getElementById('pctUntung').value) || 0;
+    const pOps = Number(document.getElementById('pctOps').value) || 0;
+
+    const sumPct = pModal + pUntung + pOps;
+    const warnEl = document.getElementById('pctWarning');
+    if (Math.abs(sumPct - 100) > 0.1) {
+      warnEl.textContent = `Peringatan: Total persentase saat ini ${sumPct.toFixed(2)}% (idealnya 100%).`;
+    } else {
+      warnEl.textContent = '';
+    }
+
+    const valModal = (totalOmset * pModal) / 100;
+    const valUntung = (totalOmset * pUntung) / 100;
+    const valOps = (totalOmset * pOps) / 100;
+
+    document.getElementById('resModal').textContent = rupiah(valModal);
+    document.getElementById('resUntung').textContent = rupiah(valUntung);
+    document.getElementById('resOps').textContent = rupiah(valOps);
+
+    return { valModal, valUntung, valOps };
+  }
+
   function renderLaporan(){
     const months = last6Months();
     const data = months.map(m => {
@@ -1082,8 +1276,8 @@
           ${data.map(d => `
             <div class="bar-col">
               <div class="bar-wrap">
-                <div class="bar income" style="height:${(d.income/maxVal*100)}%" title="${rupiah(d.income)}"></div>
-                <div class="bar expense" style="height:${(d.expense/maxVal*100)}%" title="${rupiah(d.expense)}"></div>
+                <div class="bar income" style="height:${(d.income/maxVal*100)}\%" title="${rupiah(d.income)}"></div>
+                <div class="bar expense" style="height:${(d.expense/maxVal*100)}\%" title="${rupiah(d.expense)}"></div>
               </div>
               <div class="bar-label">${d.label}</div>
             </div>`).join('')}
@@ -1105,7 +1299,7 @@
           <h3>Produk terlaris</h3>
           ${best.length ? best.map((b,i) => `
             <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px;">
-              <span>${i+1}. ${escapeHtml(b.product.name)}</span><span class="num">${b.qty} pcs</span>
+              <span>${i+1}.${escapeHtml(b.product.name)}</span><span class="num">${b.qty} pcs</span>
             </div>`).join('') : `<div style="font-size:13px;color:var(--ink-soft);">Belum ada data penjualan.</div>`}
         </div>
       </div>
@@ -1135,16 +1329,17 @@
     populateCategorySelect(btn.dataset.type);
   });
 
-  function openAddTrans(){
+  function openAddTrans(type = 'income', cat = '', amt = '', note = ''){
     editTransId = null;
     document.getElementById('transModalTitle').textContent = 'Tambah Transaksi';
     document.querySelectorAll('#transTypeSeg button').forEach(b=>b.classList.remove('on'));
-    const incomeBtn = document.querySelector('#transTypeSeg button[data-type="income"]');
-    incomeBtn.classList.add('on','income');
-    populateCategorySelect('income');
-    document.getElementById('tAmount').value = '';
+    const btn = document.querySelector(`#transTypeSeg button[data-type="${type}"]`);
+    if (btn) btn.classList.add('on', type);
+    populateCategorySelect(type);
+    if (cat) document.getElementById('tCategory').value = cat;
+    document.getElementById('tAmount').value = amt;
     document.getElementById('tDate').value = todayStr();
-    document.getElementById('tNote').value = '';
+    document.getElementById('tNote').value = note;
     openModal(ovTrans);
   }
 
@@ -1270,17 +1465,64 @@
     });
   });
   document.querySelectorAll('.overlay').forEach(ov=>{
-    if (ov.id === 'lockScreen') return; // lock screen must not be dismissible by outside click
+    if (ov.id === 'lockScreen') return;
     ov.addEventListener('click', (e)=>{ if (e.target === ov) closeModal(ov); });
   });
 
   function attachDynamicHandlers(){
     const btnAddTrans = document.getElementById('btnAddTrans');
-    if (btnAddTrans) btnAddTrans.addEventListener('click', openAddTrans);
+    if (btnAddTrans) btnAddTrans.addEventListener('click', () => openAddTrans());
     const btnAddProduk = document.getElementById('btnAddProduk');
     if (btnAddProduk) btnAddProduk.addEventListener('click', openAddProduk);
     const btnAddJual = document.getElementById('btnAddJual');
     if (btnAddJual) btnAddJual.addEventListener('click', openAddJual);
+
+    // Handlers khusus Tab Bagi Omset
+    if (currentTab === 'omset') {
+      ['omsetInput', 'pctModal', 'pctUntung', 'pctOps'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('input', calculateOmset);
+      });
+
+      document.getElementById('presetEqual').addEventListener('click', () => {
+        document.getElementById('pctModal').value = 33.33;
+        document.getElementById('pctUntung').value = 33.33;
+        document.getElementById('pctOps').value = 33.34;
+        calculateOmset();
+      });
+      document.getElementById('presetStandard').addEventListener('click', () => {
+        document.getElementById('pctModal').value = 50;
+        document.getElementById('pctUntung').value = 30;
+        document.getElementById('pctOps').value = 20;
+        calculateOmset();
+      });
+      document.getElementById('presetGrowth').addEventListener('click', () => {
+        document.getElementById('pctModal').value = 60;
+        document.getElementById('pctUntung').value = 20;
+        document.getElementById('pctOps').value = 20;
+        calculateOmset();
+      });
+
+      document.getElementById('btnUseThisMonth').addEventListener('click', () => {
+        document.getElementById('omsetInput').value = sumBy(txThisMonth(), 'income');
+        calculateOmset();
+      });
+
+      document.getElementById('btnCatatModal').addEventListener('click', () => {
+        const res = calculateOmset();
+        if (res) openAddTrans('expense', 'Belanja Stok Baju', res.valModal, 'Alokasi Modal Putar dari Pembagian Omset');
+      });
+      document.getElementById('btnCatatUntung').addEventListener('click', () => {
+        const res = calculateOmset();
+        if (res) openAddTrans('expense', 'Gaji / Bantuan Pegawai', res.valUntung, 'Alokasi Keuntungan/Gaji dari Pembagian Omset');
+      });
+      document.getElementById('btnCatatOps').addEventListener('click', () => {
+        const res = calculateOmset();
+        if (res) openAddTrans('expense', 'Sewa & Operasional Toko', res.valOps, 'Alokasi Biaya Operasional dari Pembagian Omset');
+      });
+
+      calculateOmset();
+    }
 
     document.querySelectorAll('[data-del-trans]').forEach(el=>{
       el.addEventListener('click', ()=>{
